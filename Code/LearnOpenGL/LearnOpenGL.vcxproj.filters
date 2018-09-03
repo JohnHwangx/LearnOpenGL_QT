@@ -28,6 +28,12 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="1.入门">
+      <UniqueIdentifier>{94cfe78a-78d7-480f-a943-4fab836bfa19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1.入门\1.三角形">
+      <UniqueIdentifier>{5761dd5a-50f6-4014-9020-e9ca7ad04244}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="1.入门\1_Create_Triangle.cpp">
+      <Filter>1.入门\1.三角形</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -51,5 +60,10 @@
     <QtRcc Include="Application.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="1.入门\1_Create_Triangle.h">
+      <Filter>1.入门\1.三角形</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
