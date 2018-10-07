@@ -66,24 +66,24 @@ void createTriangle::show()
 	//解绑数组对象
 	glBindVertexArray(0);
 
-	while (!glfwWindowShouldClose(window))
-	{
-		//输入
-		processInput(window);
-		//渲染
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		//绘制第一个三角
-		glUseProgram(shaderProgram);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		//glfw: 交换缓冲，轮询IO事件
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
+	//while (!glfwWindowShouldClose(window))
+	//{
+	//	//输入
+	//	processInput(window);
+	//	//渲染
+	//	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	//	glClear(GL_COLOR_BUFFER_BIT);
+	//	//绘制第一个三角
+	//	glUseProgram(shaderProgram);
+	//	glBindVertexArray(VAO);
+	//	glDrawArrays(GL_TRIANGLES, 0, 3);
+	//	//glfw: 交换缓冲，轮询IO事件
+	//	glfwSwapBuffers(window);
+	//	glfwPollEvents();
+	//}
 	//可选操作：
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	//glfw: 控制台，清除之前所获得的所有GLFW资源
-	glfwTerminate();
+	//glfwTerminate();
 }

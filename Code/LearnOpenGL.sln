@@ -5,9 +5,7 @@ VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LearnOpenGL", "LearnOpenGL\LearnOpenGL.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LearnOpenGL.Libs", "LearnOpenGL.Libs", "{13721C3A-522F-4981-B437-75BFC7B0C66C}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "1.入门", "1.入门\1.入门.vcxproj", "{003F51D6-4627-409D-BE80-73B3EFCFB48C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_src", "OpenGL_src\OpenGL_src.vcxproj", "{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,20 +21,17 @@ Global
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.ActiveCfg = Release|x64
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.Build.0 = Release|x64
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x86.ActiveCfg = Release|x64
-		{003F51D6-4627-409D-BE80-73B3EFCFB48C}.Debug|x64.ActiveCfg = Debug|x64
-		{003F51D6-4627-409D-BE80-73B3EFCFB48C}.Debug|x64.Build.0 = Debug|x64
-		{003F51D6-4627-409D-BE80-73B3EFCFB48C}.Debug|x86.ActiveCfg = Debug|Win32
-		{003F51D6-4627-409D-BE80-73B3EFCFB48C}.Debug|x86.Build.0 = Debug|Win32
-		{003F51D6-4627-409D-BE80-73B3EFCFB48C}.Release|x64.ActiveCfg = Release|x64
-		{003F51D6-4627-409D-BE80-73B3EFCFB48C}.Release|x64.Build.0 = Release|x64
-		{003F51D6-4627-409D-BE80-73B3EFCFB48C}.Release|x86.ActiveCfg = Release|Win32
-		{003F51D6-4627-409D-BE80-73B3EFCFB48C}.Release|x86.Build.0 = Release|Win32
+		{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}.Debug|x64.ActiveCfg = Debug|x64
+		{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}.Debug|x64.Build.0 = Debug|x64
+		{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}.Debug|x86.ActiveCfg = Debug|Win32
+		{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}.Debug|x86.Build.0 = Debug|Win32
+		{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}.Release|x64.ActiveCfg = Release|x64
+		{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}.Release|x64.Build.0 = Release|x64
+		{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}.Release|x86.ActiveCfg = Release|Win32
+		{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{003F51D6-4627-409D-BE80-73B3EFCFB48C} = {13721C3A-522F-4981-B437-75BFC7B0C66C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E792B958-AFCE-4F38-BA9E-F8479FAF89E4}
