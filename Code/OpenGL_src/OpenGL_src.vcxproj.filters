@@ -44,16 +44,28 @@
     <None Include="1.getting_start\4.1.textures.h">
       <Filter>1.getting_start</Filter>
     </None>
-    <None Include="1.getting_start\shaders\4.1.texture.vert">
+    <None Include="1.getting_start\shaders\4.1.textures.frag">
       <Filter>1.getting_start\shaders</Filter>
     </None>
-    <None Include="1.getting_start\shaders\4.1.textures.frag">
+    <None Include="1.getting_start\shaders\4.1.textures.vert">
+      <Filter>1.getting_start\shaders</Filter>
+    </None>
+    <None Include="1.getting_start\7.3.camera_mouse_zoom.cpp">
+      <Filter>1.getting_start</Filter>
+    </None>
+    <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.vert">
+      <Filter>1.getting_start\shaders</Filter>
+    </None>
+    <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.frag">
       <Filter>1.getting_start\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="1.getting_start\7.3.camera_mouse_zoom.h">
+      <Filter>1.getting_start</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

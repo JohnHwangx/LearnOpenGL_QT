@@ -165,10 +165,14 @@
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h" />
     <None Include="1.getting_start\4.1.textures.h" />
-    <None Include="1.getting_start\shaders\4.1.texture.vert" />
+    <None Include="1.getting_start\7.3.camera_mouse_zoom.cpp" />
+    <None Include="1.getting_start\shaders\4.1.textures.vert" />
     <None Include="1.getting_start\shaders\4.1.textures.frag" />
+    <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.frag" />
+    <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="1.getting_start\7.3.camera_mouse_zoom.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
