@@ -37,7 +37,7 @@ namespace CAMERA_MOUSE_ZOOM
 
 		static void framebuffer_size_callback(GLFWwindow* window, int x, int y);
 		static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-		static void scoll__callback(GLFWwindow* window, double xoffset, double yoffset);
+		static void scoll_callback(GLFWwindow* window, double xoffset, double yoffset);
 		void processInput(GLFWwindow* window);
 	};
 }

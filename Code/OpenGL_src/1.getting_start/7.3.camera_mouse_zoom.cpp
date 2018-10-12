@@ -32,7 +32,7 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::show()
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetScrollCallback(window, scoll__callback);
+	glfwSetScrollCallback(window, scoll_callback);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -237,7 +237,7 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::mouse_callback(GLFWwindow * window, d
 	cameraFront = normalize(front);
 }
 
-void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::scoll__callback(GLFWwindow * window, double xoffset, double yoffset)
+void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::scoll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
 	if (fov >= 1.0f && fov <= 45.0f)
 		fov -= yoffset;
