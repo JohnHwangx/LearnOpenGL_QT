@@ -197,7 +197,8 @@ void Camera::camera::show(string& message)
 		glBindVertexArray(VAO);
 		for (unsigned int i = 0; i < 10; i++)
 		{
-			mat4 model = translate(model, cubePositions[i]);
+			mat4 model;
+			model = translate(model, cubePositions[i]);
 			float angle = 20.0f*i;
 			model = rotate(model, radians(angle), vec3(1.0f, 0.3f, 0.5f));
 			ourShader.setMat4("model", model);
