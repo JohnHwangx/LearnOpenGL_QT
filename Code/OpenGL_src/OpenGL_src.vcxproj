@@ -159,6 +159,7 @@
     <ClCompile Include="..\..\ThirdParty\src\glad.c" />
     <ClCompile Include="1.getting_start\3.1.shaders_uniform.cpp" />
     <ClCompile Include="1.getting_start\4.1.textures.cpp" />
+    <ClCompile Include="1.getting_start\7.3.camera.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -166,14 +167,13 @@
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h" />
     <None Include="1.getting_start\4.1.textures.h" />
-    <None Include="1.getting_start\7.3.camera_mouse_zoom.cpp" />
     <None Include="1.getting_start\shaders\4.1.textures.vert" />
     <None Include="1.getting_start\shaders\4.1.textures.frag" />
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.frag" />
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="1.getting_start\7.3.camera_mouse_zoom.h" />
+    <ClInclude Include="1.getting_start\7.3.camera.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>

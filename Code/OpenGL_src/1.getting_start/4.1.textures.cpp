@@ -1,7 +1,11 @@
 #include "4.1.textures.h"
 using namespace std;
 
-void Textures::textures::show()
+Textures::textures::textures()
+{
+}
+
+void Textures::textures::show(string& message)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -12,7 +16,8 @@ void Textures::textures::show()
 
 	if (window == nullptr)
 	{
-		cout << "Fail to Create window" << endl;
+		//cout << "Fail to Create window" << endl;
+		message.append("Fail to Create window");
 		glfwTerminate();
 		return;
 	}
@@ -22,11 +27,16 @@ void Textures::textures::show()
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		cout << "Failed to initialize GLAD" << endl;
+		message.append("Failed to initialize GLAD");
 		return;
 	}
 
-	Shader shader("shader/4.1.texture.vert", "shader/4.1.texture.frag");
+	Shader shader("../OpenGL_src/1.getting_start/shaders/4.1.textures.vert",
+		"../OpenGL_src/1.getting_start/shaders/4.1.textures.frag");
+	if (shader.Message != nullptr)
+	{
+		message.append(shader.Message->c_str());
+	}
 
 	float vertices[] = {
 		// positions          // colors           // texture coords
@@ -69,7 +79,7 @@ void Textures::textures::show()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	int width, height, nrChannels;
-	unsigned char* data = stbi_load("./../Resource/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("../../Resource/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -77,7 +87,7 @@ void Textures::textures::show()
 	}
 	else
 	{
-		cout << "Failed to load texture" << endl;
+		message.append("Failed to load texture");
 	}
 	stbi_image_free(data);
 
@@ -111,7 +121,7 @@ void Textures::textures::framebuffer_size_callback(GLFWwindow * window, int x, i
 
 void Textures::textures::processInput(GLFWwindow * window)
 {
-	if (glfwGetKey(window,GLFW_KEY_ESCAPE)==GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
 	}

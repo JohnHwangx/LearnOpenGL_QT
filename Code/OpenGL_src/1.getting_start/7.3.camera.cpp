@@ -1,20 +1,31 @@
-#include "7.3.camera_mouse_zoom.h"
+#include "7.3.camera.h"
 using namespace std;
+using namespace glm;
 
-CAMERA_MOUSE_ZOOM::camera_mouse_zoom::camera_mouse_zoom()
+bool  Camera::camera::firstMouse = true;
+float Camera::camera::yaw = -90.0f;
+float Camera::camera::pitch = 0.0f;
+float Camera::camera::lastX = 800.0f / 2.0f;
+float Camera::camera::lastY = 800.0f / 2.0f;
+float Camera::camera::fov = 45.0f;
+vec3 Camera::camera::cameraFront = vec3(0.0f, 0.0f, -1.0f);
+
+Camera::camera::camera()
 {
 	firstMouse = true;
-
 	yaw = -90.0f;
 	pitch = 0.0f;
-	lastX = SCR_WIDTH / 2.0;
-	lastY = SCR_HEIGHT / 2.0;
+	lastX = 800.0f / 2.0f;
+	lastY = 800.0f / 2.0f;
 	fov = 45.0f;
-
 	cameraFront = vec3(0.0f, 0.0f, -1.0f);
 }
 
-void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::show()
+Camera::camera::~camera()
+{
+}
+
+void Camera::camera::show(string& message)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -24,7 +35,7 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::show()
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Learn OpenGL", NULL, NULL);
 	if (window == nullptr)
 	{
-		cout << "Fali to create window" << endl;
+		message.append("Fali to create window");
 		glfwTerminate();
 		return;
 	}
@@ -34,15 +45,18 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::show()
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scoll_callback);
 
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		cout << "Fail to load GLAD" << endl;
+		message.append("Fail to load GLAD");
 		return;
 	}
 
 	glEnable(GL_DEPTH_TEST);
 
-	Shader ourShader("7.3.camera_mouse_zoom.vert", "7.3.camera_mouse_zoom.frag");
+	Shader ourShader("../OpenGL_src/1.getting_start/shaders/7.3.camera_mouse_zoom.vert",
+		"../OpenGL_src/1.getting_start/shaders/7.3.camera_mouse_zoom.frag");
 
 	float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -121,7 +135,7 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::show()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
-	unsigned char* data = stbi_load("", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("../../Resource/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -129,7 +143,7 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::show()
 	}
 	else
 	{
-		cout << "Failed to load texture" << endl;
+		message.append("Failed to load texture");
 	}
 	stbi_image_free(data);
 
@@ -140,7 +154,7 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::show()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	data = stbi_load("", &width, &height, &nrChannels, 0);
+	data = stbi_load("../../Resource/awesomeface.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -148,7 +162,7 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::show()
 	}
 	else
 	{
-		cout << "Failed to load texture" << endl;
+		message.append("Failed to load texture");
 	}
 	stbi_image_free(data);
 
@@ -199,12 +213,12 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::show()
 	glfwTerminate();
 }
 
-void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::framebuffer_size_callback(GLFWwindow * window, int x, int y)
+void Camera::camera::framebuffer_size_callback(GLFWwindow * window, int x, int y)
 {
 	glViewport(0, 0, x, y);
 }
 
-void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::mouse_callback(GLFWwindow * window, double xpos, double ypos)
+void Camera::camera::mouse_callback(GLFWwindow * window, double xpos, double ypos)
 {
 	if (firstMouse)
 	{
@@ -237,7 +251,7 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::mouse_callback(GLFWwindow * window, d
 	cameraFront = normalize(front);
 }
 
-void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::scoll_callback(GLFWwindow * window, double xoffset, double yoffset)
+void Camera::camera::scoll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
 	if (fov >= 1.0f && fov <= 45.0f)
 		fov -= yoffset;
@@ -247,7 +261,7 @@ void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::scoll_callback(GLFWwindow * window, d
 		fov = 45.0f;
 }
 
-void CAMERA_MOUSE_ZOOM::camera_mouse_zoom::processInput(GLFWwindow * window)
+void Camera::camera::processInput(GLFWwindow * window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);

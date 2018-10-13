@@ -1,6 +1,5 @@
 #pragma once
 #include "Shader.h"
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -10,9 +9,11 @@
 
 namespace Textures
 {
-	class textures {
+	class textures
+	{
 	public:
-		void show();
+		textures();
+		void show(std::string& message);
 	private:
 		const unsigned int SCR_WIDTH = 800;
 		const unsigned int SCR_HEIGHT = 800;

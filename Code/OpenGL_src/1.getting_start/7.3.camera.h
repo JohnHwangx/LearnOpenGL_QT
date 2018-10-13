@@ -9,14 +9,12 @@
 
 #include <iostream>
 
-namespace CAMERA_MOUSE_ZOOM
-{
-	using namespace glm;
-	class camera_mouse_zoom
-	{
+namespace Camera {
+	class camera {
 	public:
-		camera_mouse_zoom();
-		void show();
+		camera();
+		~camera();
+		void show(std::string& message);
 	private:
 		const unsigned int SCR_WIDTH = 800;
 		const unsigned int SCR_HEIGHT = 800;
@@ -31,9 +29,9 @@ namespace CAMERA_MOUSE_ZOOM
 		static float lastY;
 		static float fov;
 
-		vec3 cameraPos = vec3(0.0f, 0.0f,3.0f);
-		static vec3 cameraFront;
-		vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
+		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+		static glm::vec3 cameraFront;
+		glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 		static void framebuffer_size_callback(GLFWwindow* window, int x, int y);
 		static void mouse_callback(GLFWwindow* window, double xpos, double ypos);

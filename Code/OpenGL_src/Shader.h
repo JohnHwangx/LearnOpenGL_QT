@@ -11,6 +11,7 @@ class Shader
 {
 public:
 	unsigned int ID;
+	std::string* Message;
 	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
 	~Shader();
 

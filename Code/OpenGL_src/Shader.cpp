@@ -54,7 +54,7 @@ std::string Shader::loadShaderCode(const char * path)
 	}
 	catch (const std::exception&)
 	{
-		cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << endl;
+		Message->append("ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ");
 	}
 	return shaderStream.str();
 }
@@ -78,7 +78,7 @@ void Shader::checkCompileError(GLuint shader, const std::string & type)
 		if (!success)
 		{
 			glGetProgramInfoLog(shader, 1024, NULL, loginfo);
-			cout << "ERROR::SHADER_COMPILATION_ERROR of type:" << type << "\n" << loginfo << "\n-- ---------------------------------------" << endl;
+			Message->append("ERROR::SHADER_COMPILATION_ERROR of type:" + type + "\n" + loginfo + "\n-- ---------------------------------------");
 		}
 	}
 	else {
@@ -86,7 +86,7 @@ void Shader::checkCompileError(GLuint shader, const std::string & type)
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, loginfo);
-			cout << "ERROR::PROGRAM_LINKING_ERROR of type:" << type << "\n" << loginfo << "\n-- ---------------------------------------" << endl;
+			Message->append("ERROR::PROGRAM_LINKING_ERROR of type:" + type + "\n" + loginfo + "\n-- ---------------------------------------");
 		}
 	}
 }
