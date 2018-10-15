@@ -16,8 +16,8 @@ namespace Camera {
 		~camera();
 		void show(std::string& message);
 	private:
-		const unsigned int SCR_WIDTH = 800;
-		const unsigned int SCR_HEIGHT = 800;
+		const unsigned int SCR_WIDTH = 1600;
+		const unsigned int SCR_HEIGHT = 1600;
 
 		float deltaTime = 0.0f;
 		float lastFrame = 0.0f;

@@ -19,6 +19,12 @@
     <Filter Include="1.getting_start\shaders">
       <UniqueIdentifier>{0e2aee79-9f9d-4b41-8045-bd76b93d071f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2.lighting">
+      <UniqueIdentifier>{d047764c-4a96-46ff-ae0b-1f33b6da3446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2.lighting\shaders">
+      <UniqueIdentifier>{c106cf27-ceda-44c1-b3be-8728aa13a4ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ThirdParty\src\glad.c">
@@ -42,6 +48,24 @@
     <ClCompile Include="1.getting_start\7.3.camera.cpp">
       <Filter>1.getting_start</Filter>
     </ClCompile>
+    <ClCompile Include="Trackball.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="2.lighting\1.base_lighting.cpp">
+      <Filter>2.lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="2.lighting\2.material.cpp">
+      <Filter>2.lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="2.lighting\3.lighting_maps.cpp">
+      <Filter>2.lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="2.lighting\4.light_caster.cpp">
+      <Filter>2.lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="2.lighting\5.multiple_lights.cpp">
+      <Filter>2.lighting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h">
@@ -62,6 +86,36 @@
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.frag">
       <Filter>1.getting_start\shaders</Filter>
     </None>
+    <None Include="2.lighting\shaders\1.base_lighting.vert">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\1.base_lighting.frag">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\2.material.vert">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\2.material.frag">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\5.multiple_lights.vert">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\5.multiple_lights.frag">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\4.light_caster.vert">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\4.light_caster.frag">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\3.lighting_maps.vert">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\3.lighting_maps.frag">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -72,6 +126,27 @@
     </ClInclude>
     <ClInclude Include="1.getting_start\7.3.camera.h">
       <Filter>1.getting_start</Filter>
+    </ClInclude>
+    <ClInclude Include="Trackball.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="2.lighting\1.base_lighting.h">
+      <Filter>2.lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="2.lighting\2.material.h">
+      <Filter>2.lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="2.lighting\3.lighting_maps.h">
+      <Filter>2.lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="2.lighting\4.light_caster.h">
+      <Filter>2.lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="2.lighting\5.multiple_lights.h">
+      <Filter>2.lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertices.h">
+      <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

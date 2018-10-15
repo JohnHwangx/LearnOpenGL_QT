@@ -5,8 +5,8 @@ using namespace glm;
 bool  Camera::camera::firstMouse = true;
 float Camera::camera::yaw = -90.0f;
 float Camera::camera::pitch = 0.0f;
-float Camera::camera::lastX = 800.0f / 2.0f;
-float Camera::camera::lastY = 800.0f / 2.0f;
+float Camera::camera::lastX = 1600.0f / 2.0f;
+float Camera::camera::lastY = 1600.0f / 2.0f;
 float Camera::camera::fov = 45.0f;
 vec3 Camera::camera::cameraFront = vec3(0.0f, 0.0f, -1.0f);
 
@@ -135,6 +135,7 @@ void Camera::camera::show(string& message)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load("../../Resource/container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{

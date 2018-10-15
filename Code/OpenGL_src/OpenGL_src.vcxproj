@@ -160,9 +160,15 @@
     <ClCompile Include="1.getting_start\3.1.shaders_uniform.cpp" />
     <ClCompile Include="1.getting_start\4.1.textures.cpp" />
     <ClCompile Include="1.getting_start\7.3.camera.cpp" />
+    <ClCompile Include="2.lighting\1.base_lighting.cpp" />
+    <ClCompile Include="2.lighting\2.material.cpp" />
+    <ClCompile Include="2.lighting\3.lighting_maps.cpp" />
+    <ClCompile Include="2.lighting\4.light_caster.cpp" />
+    <ClCompile Include="2.lighting\5.multiple_lights.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="Trackball.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h" />
@@ -171,11 +177,28 @@
     <None Include="1.getting_start\shaders\4.1.textures.frag" />
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.frag" />
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.vert" />
+    <None Include="2.lighting\shaders\1.base_lighting.frag" />
+    <None Include="2.lighting\shaders\1.base_lighting.vert" />
+    <None Include="2.lighting\shaders\2.material.frag" />
+    <None Include="2.lighting\shaders\2.material.vert" />
+    <None Include="2.lighting\shaders\3.lighting_maps.frag" />
+    <None Include="2.lighting\shaders\3.lighting_maps.vert" />
+    <None Include="2.lighting\shaders\4.light_caster.frag" />
+    <None Include="2.lighting\shaders\4.light_caster.vert" />
+    <None Include="2.lighting\shaders\5.multiple_lights.frag" />
+    <None Include="2.lighting\shaders\5.multiple_lights.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="1.getting_start\7.3.camera.h" />
+    <ClInclude Include="2.lighting\1.base_lighting.h" />
+    <ClInclude Include="2.lighting\2.material.h" />
+    <ClInclude Include="2.lighting\3.lighting_maps.h" />
+    <ClInclude Include="2.lighting\4.light_caster.h" />
+    <ClInclude Include="2.lighting\5.multiple_lights.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Trackball.h" />
+    <ClInclude Include="Vertices.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
