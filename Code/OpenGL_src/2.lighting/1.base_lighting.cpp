@@ -39,7 +39,7 @@ void BASE_LIGHT::base_light::show(std::string & message)
 	Shader cubeShader("../OpenGL_src/2.lighting/1.base_lighting.vert", 
 		"../OpenGL_src/2.lighting/1.base_lighting.frag");
 
-	int vertices[] = VERTICES::vertices_color;
+	float* vertices = VERTICES::vertices_color;
 
 	unsigned int VAO, VBO;
 	glGenVertexArrays(1, &VAO);
