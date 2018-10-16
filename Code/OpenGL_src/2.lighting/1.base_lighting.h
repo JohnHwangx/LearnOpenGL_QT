@@ -1,6 +1,6 @@
 #pragma once
 #include "Shader.h"
-#include "Vertices.h"
+//#include "Vertices.h"
 #include "Camera.h"
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -21,7 +21,7 @@ namespace BASE_LIGHT {
 		float lastFrame;
 
 		static bool firstMouse;
-		static Camera camera;
+		static CAMERA::Camera camera;
 		static float lastX;
 		static float lastY;
 

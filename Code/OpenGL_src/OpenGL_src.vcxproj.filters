@@ -86,12 +86,6 @@
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.frag">
       <Filter>1.getting_start\shaders</Filter>
     </None>
-    <None Include="2.lighting\shaders\1.base_lighting.vert">
-      <Filter>2.lighting\shaders</Filter>
-    </None>
-    <None Include="2.lighting\shaders\1.base_lighting.frag">
-      <Filter>2.lighting\shaders</Filter>
-    </None>
     <None Include="2.lighting\shaders\2.material.vert">
       <Filter>2.lighting\shaders</Filter>
     </None>
@@ -114,6 +108,18 @@
       <Filter>2.lighting\shaders</Filter>
     </None>
     <None Include="2.lighting\shaders\3.lighting_maps.frag">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\1.1.lamp.vert">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\1.1.base_lighting.frag">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\1.1.base_lighting.vert">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\1.1.lamp.frag">
       <Filter>2.lighting\shaders</Filter>
     </None>
   </ItemGroup>

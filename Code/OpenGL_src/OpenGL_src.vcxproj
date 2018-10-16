@@ -177,8 +177,10 @@
     <None Include="1.getting_start\shaders\4.1.textures.frag" />
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.frag" />
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.vert" />
-    <None Include="2.lighting\shaders\1.base_lighting.frag" />
-    <None Include="2.lighting\shaders\1.base_lighting.vert" />
+    <None Include="2.lighting\shaders\1.1.lamp.frag" />
+    <None Include="2.lighting\shaders\1.1.lamp.vert" />
+    <None Include="2.lighting\shaders\1.1.base_lighting.frag" />
+    <None Include="2.lighting\shaders\1.1.base_lighting.vert" />
     <None Include="2.lighting\shaders\2.material.frag" />
     <None Include="2.lighting\shaders\2.material.vert" />
     <None Include="2.lighting\shaders\3.lighting_maps.frag" />

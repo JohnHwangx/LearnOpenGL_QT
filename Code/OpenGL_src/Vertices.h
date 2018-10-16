@@ -1,7 +1,7 @@
 #pragma once
 namespace VERTICES
 {
-	float vertices_texture[] = {
+	extern float vertices_texture[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
 		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -45,7 +45,7 @@ namespace VERTICES
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
-	float vertices_color[] = {
+	extern float vertices_color[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
