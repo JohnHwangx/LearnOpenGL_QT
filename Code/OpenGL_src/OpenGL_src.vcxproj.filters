@@ -152,7 +152,7 @@
       <Filter>2.lighting</Filter>
     </ClInclude>
     <ClInclude Include="Vertices.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

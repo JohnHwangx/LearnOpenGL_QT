@@ -79,7 +79,7 @@ void CAMERA::Camera::ProcessMouseMove(float xoffset, float yoffset, bool constra
 
 void CAMERA::Camera::ProcessMouseScroll(float yoffset)
 {
-	if (Zoom > 1.0f&&Zoom < 45.0f)
+	if (Zoom >= 1.0f&&Zoom <= 45.0f)
 		Zoom -= yoffset;
 	else if (Zoom <= 1.0f)
 		Zoom = 1.0f;
