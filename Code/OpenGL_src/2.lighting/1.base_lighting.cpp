@@ -1,8 +1,11 @@
 #include "1.base_lighting.h"
+#include "Vertices.h"
+
 using namespace glm;
 using namespace std;
 using namespace CAMERA;
 using namespace BASE_LIGHT;
+using namespace VERTICES;
 
 bool base_light::firstMouse = true;
 Camera base_light::camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -64,7 +67,9 @@ void base_light::show(std::string & message)
 	Shader lightShader("../OpenGL_src/2.lighting/shaders/1.1.lamp.vert", 
 		"../OpenGL_src/2.lighting/shaders/1.1.lamp.frag");
 
-	float vertices[] = {
+	//float* vertices = VERTICES::vertices_color;
+
+	/*float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -106,14 +111,14 @@ void base_light::show(std::string & message)
 		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
 		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-	};
+	};*/
 
 	unsigned int cubeVAO, VBO;
 	glGenVertexArrays(1, &cubeVAO);
 	glBindVertexArray(cubeVAO);
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_color), vertices_color, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
