@@ -92,21 +92,55 @@ void MATERIAL::material::show(std::string & message)
 
 		mat4 model;
 		cubeShader.setMat4("model", model);
+
+		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		lightShader.use();
+		lightShader.setMat4("projection", projection);
+		lightShader.setMat4("view", view);
+		model = mat4(0);
+		lightShader.setMat4("model", model);
+
+		glBindVertexArray(lightVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
+	glDeleteVertexArrays(1, &cubeVAO);
+	glDeleteVertexArrays(1, &lightVAO);
+	glDeleteBuffers(1, &VBO);
+
+	glfwTerminate();
 }
 
 void MATERIAL::material::processInput(GLFWwindow * window)
 {
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window,GL_TRUE);
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
 }
 
 void MATERIAL::material::framebuffer_callback(GLFWwindow * window, int width, int height)
 {
+	glViewport(0, 0, width, height);
 }
 
 void MATERIAL::material::mouse_callback(GLFWwindow * window, double xPos, double yPos)
 {
+
 }
 
 void MATERIAL::material::scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
+	camera.ProcessMouseScroll(yoffset);
 }
