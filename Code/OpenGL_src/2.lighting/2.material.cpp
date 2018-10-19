@@ -7,6 +7,7 @@ using namespace MATERIAL;
 using namespace VERTICES;
 using namespace CAMERA;
 
+bool material::firstMouse = true;
 Camera material::camera = Camera(vec3(0.0f, 0.0f, 0.3f));
 
 MATERIAL::material::material()
@@ -17,7 +18,9 @@ MATERIAL::material::material()
 	deltaTime = 0.0f;
 	lastFrame = 0.0f;
 
+	firstMouse = true;
 	camera = Camera(vec3(0.0f, 0.0f, 0.3f));
+	lightPos = vec3(1.2f, 1.0f, 2.0f);
 }
 
 MATERIAL::material::~material()
@@ -85,6 +88,8 @@ void MATERIAL::material::show(std::string & message)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		cubeShader.use();
+		cubeShader.setVec3("",)
+
 		mat4 projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		mat4 view = camera.GetViewMatrix();
 		cubeShader.setMat4("projection", projection);
@@ -99,7 +104,8 @@ void MATERIAL::material::show(std::string & message)
 		lightShader.use();
 		lightShader.setMat4("projection", projection);
 		lightShader.setMat4("view", view);
-		model = mat4(0);
+		model = translate(model,lightPos);
+		model = scale(model, vec3(0.2f));
 		lightShader.setMat4("model", model);
 
 		glBindVertexArray(lightVAO);
@@ -118,7 +124,7 @@ void MATERIAL::material::show(std::string & message)
 void MATERIAL::material::processInput(GLFWwindow * window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window,GL_TRUE);
+		glfwSetWindowShouldClose(window, GL_TRUE);
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
@@ -137,7 +143,19 @@ void MATERIAL::material::framebuffer_callback(GLFWwindow * window, int width, in
 
 void MATERIAL::material::mouse_callback(GLFWwindow * window, double xPos, double yPos)
 {
+	if (firstMouse)
+	{
+		lastX = xPos;
+		lastY = yPos;
+		firstMouse = false;
+	}
 
+	float xoffset = xPos - lastX;
+	float yoffset = lastY - yPos;
+	lastX = xPos;
+	lastY = yPos;
+
+	camera.ProcessMouseMove(xoffset, yoffset);
 }
 
 void MATERIAL::material::scroll_callback(GLFWwindow * window, double xoffset, double yoffset)

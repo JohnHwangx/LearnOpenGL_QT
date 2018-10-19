@@ -20,6 +20,11 @@ namespace MATERIAL {
 		float deltaTime;
 		float lastFrame;
 
+		glm::vec3 lightPos;
+
+		static bool firstMouse;
+		static float lastX;
+		static float lastY;
 		static CAMERA::Camera camera;
 
 		void processInput(GLFWwindow* window);
