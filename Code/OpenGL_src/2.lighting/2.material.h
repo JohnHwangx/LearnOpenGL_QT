@@ -1,4 +1,4 @@
-#pragma 
+#pragma once
 #include "Shader.h"
 //#include "Vertices.h"
 #include "Camera.h"
@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
+
 namespace MATERIAL {
 	class material {
 	public:

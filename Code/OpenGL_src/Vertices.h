@@ -1,4 +1,5 @@
 #pragma once
+
 namespace VERTICES
 {
 	extern float vertices_texture[] = {

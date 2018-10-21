@@ -5,11 +5,13 @@ Application::Application(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-
+	//ÈëÃÅ
 	connect(ui.shader_uniform, &QPushButton::clicked, this, &Application::on_shader_uniform);
 	connect(ui.texture, &QPushButton::clicked, this, &Application::on_texture);
+	//¹âÕÕ
 	connect(ui.camera, &QPushButton::clicked, this, &Application::on_camera);
 	connect(ui.basic_lighting, &QPushButton::clicked, this, &Application::on_base_light);
+	connect(ui.material, &QPushButton::clicked, this, &Application::on_material);
 }
 
 void Application::on_shader_uniform()
@@ -38,6 +40,14 @@ void Application::on_base_light()
 {
 	std::string message;
 	BASE_LIGHT::base_light show = BASE_LIGHT::base_light();
+	show.show(message);
+	ui.textBrowser->setText(QString::fromStdString(message));
+}
+
+void Application::on_material()
+{
+	std::string message;
+	MATERIAL::material show;
 	show.show(message);
 	ui.textBrowser->setText(QString::fromStdString(message));
 }

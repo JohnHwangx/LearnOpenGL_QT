@@ -3,6 +3,7 @@
 #include <1.getting_start/4.1.textures.h>
 #include <1.getting_start/7.3.camera.h>
 #include <2.lighting/1.base_lighting.h>
+#include <2.lighting/2.material.h>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMessageBox>
 #include "ui_Application.h"
@@ -22,4 +23,5 @@ private slots:
 	void on_texture();
 	void on_camera();
 	void on_base_light();
+	void on_material();
 };
