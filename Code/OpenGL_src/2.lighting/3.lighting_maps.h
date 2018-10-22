@@ -16,6 +16,14 @@ namespace LIGHTING_MAPS {
 		unsigned int SCR_WIDTH;
 		unsigned int SCR_HEIGHT;
 
+		float deltaTime;
+		float lastFrame;
+
+		glm::vec3 lightPos;
+
+		static bool firstMouse;
+		static float lastX;
+		static float lastY;
 		static CAMERA::Camera camera;
 
 		void processInput(GLFWwindow* window);
