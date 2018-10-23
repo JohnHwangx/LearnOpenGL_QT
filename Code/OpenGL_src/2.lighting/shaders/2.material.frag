@@ -36,7 +36,7 @@ void main()
 	vec3 lightDir = normalize(FragPos - light.position);//从光源到片段
 	vec3 norm = normalize(Normal);
 	float diff = max(dot(norm, -lightDir), 0.0);
-	vec3 diffuse = light.diffuse * (diff * material.diffuse);
+	vec3 diffuse = (diff * material.diffuse) * light.diffuse;
 
 	//specular lighting
 	//float specularStrength = 0.5;

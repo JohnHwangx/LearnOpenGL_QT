@@ -24,4 +24,5 @@ private slots:
 	void on_camera();
 	void on_base_light();
 	void on_material();
+	void on_lighting_maps();
 };

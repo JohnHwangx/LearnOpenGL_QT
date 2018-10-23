@@ -6,6 +6,31 @@ using namespace std;
 using namespace glm;
 using namespace LIGHTING_MAPS;
 
+bool lighting_maps::firstMouse = true;
+float lighting_maps::lastX = 0.0f;
+float lighting_maps::lastY = 0.0f;
+CAMERA::Camera lighting_maps::camera = vec3(0.0f, 0.0f, 3.0f);
+
+LIGHTING_MAPS::lighting_maps::lighting_maps()
+{
+	SCR_WIDTH = 1200;
+	SCR_HEIGHT = 1200;
+
+	deltaTime = 0.0f;
+	lastFrame = 0.0f;
+
+	lightPos = vec3(1.2f, 1.0f, 2.0f);
+
+	firstMouse = true;
+	lastX = SCR_WIDTH / 2.0f;
+	lastY = SCR_HEIGHT / 2.0;
+	camera = vec3(0.0f, 0.0f, 3.0f);
+}
+
+LIGHTING_MAPS::lighting_maps::~lighting_maps()
+{
+}
+
 void lighting_maps::show(std::string & message)
 {
 	glfwInit();
@@ -35,25 +60,44 @@ void lighting_maps::show(std::string & message)
 
 	glEnable(GL_DEPTH_TEST);
 
-	Shader cubeShader("", "");
-	Shader lightShader("", "");
+	Shader cubeShader("../OpenGL_src/2.lighting/shaders/3.lighting_maps.vert",
+		"../OpenGL_src/2.lighting/shaders/3.lighting_maps.frag");
+	Shader lightShader("../OpenGL_src/2.lighting/shaders/1.1.lamp.vert",
+		"../OpenGL_src/2.lighting/shaders/1.1.lamp.frag");
 
 	unsigned int cubeVAO, VBO;
 	glGenVertexArrays(1, &cubeVAO);
 	glBindVertexArray(cubeVAO);
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES::vertices_color), VERTICES::vertices_color, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES::vertices_normal_texture), VERTICES::vertices_normal_texture, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float) * 3));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 3));
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 6));
+	glEnableVertexAttribArray(2);
 
 	unsigned int lightVAO;
 	glGenVertexArrays(1, &lightVAO);
 	glBindVertexArray(lightVAO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	unsigned int texture1, texture2;
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	int width, height, nrchannel;
+	unsigned char* data = stbi_load("", &width, &height, &nrchannel, 0);
+	if (!data)
+	{
+		glTexImage2D(GL_TEXTURE_2D,)
+	}
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -69,8 +113,24 @@ void lighting_maps::show(std::string & message)
 		//cube
 		cubeShader.use();
 
-		//cubeShader.setVec3("", );
+		vec3 lightColor;
+		lightColor.x = sin(glfwGetTime()*0.5f);
+		lightColor.y = sin(glfwGetTime()*0.7f);
+		lightColor.z = sin(glfwGetTime()*1.3f);
+		vec3 diffuseColor = lightColor * vec3(0.5f);
+		vec3  ambientColor = diffuseColor * vec3(0.2f);
 
+		cubeShader.setVec3("light.material", ambientColor);
+		cubeShader.setVec3("light.diffuse", diffuseColor);
+		cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.setVec3("light.position", lightPos);
+
+		cubeShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+		cubeShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+		cubeShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+		cubeShader.setFloat("material.shininess", 32.0f);
+
+		cubeShader.setVec3("viewPos", camera.Position);
 
 		mat4 projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		mat4 view = camera.GetViewMatrix();

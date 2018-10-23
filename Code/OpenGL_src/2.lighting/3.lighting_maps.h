@@ -7,10 +7,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <stb_image.h>
+
 #include <iostream>
 namespace LIGHTING_MAPS {
 	class lighting_maps {
 	public:
+		lighting_maps();
+		~lighting_maps();
 		void show(std::string& message);
 	private:
 		unsigned int SCR_WIDTH;
