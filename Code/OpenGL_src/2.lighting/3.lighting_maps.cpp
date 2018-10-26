@@ -84,20 +84,12 @@ void lighting_maps::show(std::string & message)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	unsigned int texture1, texture2;
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	unsigned int diffuseMap = loadTexture("../../Resource/container2.png");
+	unsigned int specularMap = loadTexture("../../Resource/container2_specular.png");
 
-	int width, height, nrchannel;
-	unsigned char* data = stbi_load("", &width, &height, &nrchannel, 0);
-	if (!data)
-	{
-		glTexImage2D(GL_TEXTURE_2D,)
-	}
+	cubeShader.use();
+	cubeShader.setInt("material.diffuse", 0);
+	cubeShader.setInt("material.specular", 1);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -120,15 +112,17 @@ void lighting_maps::show(std::string & message)
 		vec3 diffuseColor = lightColor * vec3(0.5f);
 		vec3  ambientColor = diffuseColor * vec3(0.2f);
 
+		/*cubeShader.setVec3("light.material", 0.2f, 0.2f, 0.2f);
+		cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);*/
 		cubeShader.setVec3("light.material", ambientColor);
 		cubeShader.setVec3("light.diffuse", diffuseColor);
 		cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 		cubeShader.setVec3("light.position", lightPos);
 
-		cubeShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+		/*cubeShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
 		cubeShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-		cubeShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-		cubeShader.setFloat("material.shininess", 32.0f);
+		cubeShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);*/
+		cubeShader.setFloat("material.shininess", 64.0f);
 
 		cubeShader.setVec3("viewPos", camera.Position);
 
@@ -139,6 +133,11 @@ void lighting_maps::show(std::string & message)
 
 		mat4 model;
 		cubeShader.setMat4("model", model);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseMap);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularMap);
 
 		glBindVertexArray(cubeVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -176,6 +175,35 @@ void LIGHTING_MAPS::lighting_maps::processInput(GLFWwindow * window)
 		camera.ProcessKeyboard(CAMERA::LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(CAMERA::RIGHT, deltaTime);
+}
+
+unsigned int lighting_maps::loadTexture(const char * path)
+{
+	unsigned int textureId;
+	glGenTextures(1, &textureId);
+	
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		GLenum format;
+		if (nrChannels == 1)
+			format = GL_RED;
+		else if (nrChannels == 3)
+			format == GL_RGB;
+		else if (nrChannels = 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureId);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	return textureId;
 }
 
 void LIGHTING_MAPS::lighting_maps::framebuffer_callback(GLFWwindow * window, int width, int height)

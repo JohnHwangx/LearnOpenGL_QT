@@ -31,6 +31,7 @@ namespace LIGHTING_MAPS {
 		static CAMERA::Camera camera;
 
 		void processInput(GLFWwindow* window);
+		unsigned int loadTexture(const char* path);
 		static void framebuffer_callback(GLFWwindow* window, int width, int height);
 		static void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 		static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
