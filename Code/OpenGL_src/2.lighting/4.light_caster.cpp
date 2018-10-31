@@ -1,5 +1,34 @@
 #include "4.light_caster.h"
 
+using namespace glm;
+using namespace std;
+using namespace LIGHT_CASTER;
+
+bool light_caster::firstMouse = true;
+float light_caster::lastX = 0.0f;
+float light_caster::lastY = 0.0f;
+CAMERA::Camera light_caster::camera = vec3(0.0f, 0.0f, 3.0f);
+
+LIGHT_CASTER::light_caster::light_caster()
+{
+	SCR_WIDTH = 1200;
+	SCR_HEIGHT = 1200;
+
+	deltaTime = 0.0f;
+	lastFrame = 0.0f;
+
+	lightPos = vec3(1.2f, 1.0f, 2.0f);
+
+	firstMouse = true;
+	lastX = SCR_WIDTH / 2.0f;
+	lastY = SCR_HEIGHT / 2.0f;
+	camera = vec3(0.0f, 0.0f, 3.0f);
+}
+
+LIGHT_CASTER::light_caster::~light_caster()
+{
+}
+
 void LIGHT_CASTER::light_caster::show(std::string & message)
 {
 	glfwInit();
@@ -28,8 +57,10 @@ void LIGHT_CASTER::light_caster::show(std::string & message)
 
 	glEnable(GL_DEPTH_TEST);
 
-	Shader cubeShader("", "");
-	Shader lightShader("", "");
+	Shader cubeShader("../OpenGL_src/2.lighting/shaders/4.light_caster.vert",
+		"../OpenGL_src/2.lighting/shaders/4.light_caster.frag");
+	Shader lightShader("../OpenGL_src/2.lighting/shaders/1.1.lamp.vert",
+		"../OpenGL_src/2.lighting/shaders/1.1.lamp.frag");
 
 	unsigned int cubeVAO, VBO;
 	glGenVertexArrays(1, &cubeVAO);
@@ -44,12 +75,18 @@ void LIGHT_CASTER::light_caster::show(std::string & message)
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-	unsigned int diffuseTex = loadTexture("", message);
-	unsigned int specularTex = loadTexture("", message);
+	unsigned int lightVAO;
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	unsigned int diffuseTex = loadTexture("../../Resource/container2.png", message);
+	unsigned int specularTex = loadTexture("../../Resource/container2_specular.png", message);
 
 	cubeShader.use();
-	cubeShader.setInt("", 0);
-	cubeShader.setInt("", 1);
+	cubeShader.setInt("material.diffuse", 0);
+	cubeShader.setInt("material.specular", 1);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -57,12 +94,54 @@ void LIGHT_CASTER::light_caster::show(std::string & message)
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		processInput(window);
+
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		cubeShader.use();
+		cubeShader.setVec3("lighting.ambient", 0.2f, 0.2f, 0.2f);
+		cubeShader.setVec3("lighting.diffuse", 0.5f, 0.5f, 0.5f);
+		cubeShader.setVec3("lighting.specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.setVec3("lighting.position", lightPos);
 
+		cubeShader.setFloat("material.shininess", 64.0f);
+		cubeShader.setVec3("viewPos", camera.Position);
+
+		mat4 projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		mat4 view = camera.GetViewMatrix();
+		cubeShader.setMat4("projection", projection);
+		cubeShader.setMat4("view", view);
+
+		mat4 model;
+		cubeShader.setMat4("model", model);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseTex);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularTex);
+
+		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		lightShader.use();
+		lightShader.setMat4("projection", projection);
+		lightShader.setMat4("view", view);
+		model = translate(model, lightPos);
+		model = scale(model, vec3(0.2));
+		lightShader.setMat4("model", model);
+
+		glBindVertexArray(lightVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
+	glDeleteVertexArrays(1, &cubeVAO);
+	glDeleteVertexArrays(1, &lightVAO);
+	glDeleteBuffers(1, &VBO);
+
+	glfwTerminate();
 }
 
 unsigned int LIGHT_CASTER::light_caster::loadTexture(const char * path, std::string& message)
@@ -105,7 +184,7 @@ unsigned int LIGHT_CASTER::light_caster::loadTexture(const char * path, std::str
 void LIGHT_CASTER::light_caster::processInput(GLFWwindow * window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwWindowShouldClose(window);
+		glfwSetWindowShouldClose(window, GL_TRUE);
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera.ProcessKeyboard(CAMERA::FORWARD, deltaTime);

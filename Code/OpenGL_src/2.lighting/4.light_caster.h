@@ -11,6 +11,8 @@
 namespace LIGHT_CASTER {
 	class light_caster {
 	public:
+		light_caster();
+		~light_caster();
 		void show(std::string& message);
 	private:
 		unsigned int SCR_WIDTH;
@@ -18,6 +20,8 @@ namespace LIGHT_CASTER {
 
 		float deltaTime;
 		float lastFrame;
+
+		glm::vec3 lightPos;
 
 		static bool firstMouse;
 		static float lastX;

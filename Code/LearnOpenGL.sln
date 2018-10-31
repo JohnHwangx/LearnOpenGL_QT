@@ -11,6 +11,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_src", "OpenGL_src\OpenGL_src.vcxproj", "{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_Test", "OpenGL_Test\OpenGL_Test.vcxproj", "{E4ACE0EB-C79B-4128-93CC-AE3FA59828A4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3} = {D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

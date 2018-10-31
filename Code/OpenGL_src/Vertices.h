@@ -90,7 +90,7 @@ namespace VERTICES
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 
-	float vertices_normal_texture[] = {
+	extern float vertices_normal_texture[] = {
 		// positions          // normals           // texture coords
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,

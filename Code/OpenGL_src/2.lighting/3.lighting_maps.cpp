@@ -36,6 +36,7 @@ void lighting_maps::show(std::string & message)
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Learn OpenGL", NULL, NULL);
 	if (window == NULL)
@@ -114,7 +115,7 @@ void lighting_maps::show(std::string & message)
 
 		/*cubeShader.setVec3("light.material", 0.2f, 0.2f, 0.2f);
 		cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);*/
-		cubeShader.setVec3("light.material", ambientColor);
+		cubeShader.setVec3("light.ambient", ambientColor);
 		cubeShader.setVec3("light.diffuse", diffuseColor);
 		cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 		cubeShader.setVec3("light.position", lightPos);
