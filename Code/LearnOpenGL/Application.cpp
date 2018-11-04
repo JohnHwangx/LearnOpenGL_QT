@@ -12,6 +12,9 @@ Application::Application(QWidget *parent)
 	connect(ui.camera, &QPushButton::clicked, this, &Application::on_camera);
 	connect(ui.basic_lighting, &QPushButton::clicked, this, &Application::on_base_light);
 	connect(ui.material, &QPushButton::clicked, this, &Application::on_material);
+	connect(ui.lighting_map, &QPushButton::clicked, this, &Application::on_lighting_maps);
+	connect(ui.light_caster, &QPushButton::clicked, this, &Application::on_light_caster);
+	connect(ui.multiple_lights, &QPushButton::clicked, this, &Application::on_multiple_light);
 }
 
 void Application::on_shader_uniform()
@@ -48,6 +51,30 @@ void Application::on_material()
 {
 	std::string message;
 	MATERIAL::material show;
+	show.show(message);
+	ui.textBrowser->setText(QString::fromStdString(message));
+}
+
+void Application::on_lighting_maps()
+{
+	std::string message;
+	LIGHTING_MAPS::lighting_maps show;
+	show.show(message);
+	ui.textBrowser->setText(QString::fromStdString(message));
+}
+
+void Application::on_light_caster()
+{
+	std::string message;
+	LIGHT_CASTER::light_caster show;
+	show.show(message);
+	ui.textBrowser->setText(QString::fromStdString(message));
+}
+
+void Application::on_multiple_light()
+{
+	std::string message;
+	MULTIPLE_LIGHTS::multiple_lights show;
 	show.show(message);
 	ui.textBrowser->setText(QString::fromStdString(message));
 }

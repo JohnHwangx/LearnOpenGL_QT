@@ -22,7 +22,6 @@ namespace CAMERA
 
 	class Camera {
 	private:
-		glm::vec3 Front;
 		glm::vec3 Up;
 		glm::vec3 Right;
 		glm::vec3 WorldUp;
@@ -39,6 +38,7 @@ namespace CAMERA
 		Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw = YAW, float pitch = PITCH);
 
 		glm::vec3 Position;
+		glm::vec3 Front;
 		float Zoom;
 
 		glm::mat4 GetViewMatrix();

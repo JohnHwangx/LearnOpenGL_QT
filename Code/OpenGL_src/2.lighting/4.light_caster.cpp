@@ -103,7 +103,17 @@ void LIGHT_CASTER::light_caster::show(std::string & message)
 		cubeShader.setVec3("lighting.ambient", 0.2f, 0.2f, 0.2f);
 		cubeShader.setVec3("lighting.diffuse", 0.5f, 0.5f, 0.5f);
 		cubeShader.setVec3("lighting.specular", 1.0f, 1.0f, 1.0f);
-		cubeShader.setVec3("lighting.position", lightPos);
+
+		cubeShader.setFloat("lighting.constant", 1.0f);
+		cubeShader.setFloat("lighting.linear", 0.09f);
+		cubeShader.setFloat("lighting.quadratic", 0.032f);
+
+		//cubeShader.setVec3("lighting.position", lightPos);
+		//cubeShader.setVec3("lighting.direction", -2.0f, -1.0f, -0.3f);
+		cubeShader.setVec3("lighting.position", camera.Position);
+		cubeShader.setVec3("lighting.direction", camera.Front);
+		cubeShader.setFloat("lighting.cutOff", glm::cos(glm::radians(12.5f)));
+		cubeShader.setFloat("lighting.outerCutOff", glm::cos(glm::radians(17.5f)));
 
 		cubeShader.setFloat("material.shininess", 64.0f);
 		cubeShader.setVec3("viewPos", camera.Position);
@@ -113,8 +123,8 @@ void LIGHT_CASTER::light_caster::show(std::string & message)
 		cubeShader.setMat4("projection", projection);
 		cubeShader.setMat4("view", view);
 
-		mat4 model;
-		cubeShader.setMat4("model", model);
+		/*mat4 model;
+		cubeShader.setMat4("model", model);*/
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseTex);
@@ -122,8 +132,18 @@ void LIGHT_CASTER::light_caster::show(std::string & message)
 		glBindTexture(GL_TEXTURE_2D, specularTex);
 
 		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			mat4 model;
+			model = translate(model, VERTICES::cubePositions[i]);
+			float angle = 20.0f * i;
+			model = rotate(model, radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			cubeShader.setMat4("model", model);
 
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
+		/*mat4 model;
 		lightShader.use();
 		lightShader.setMat4("projection", projection);
 		lightShader.setMat4("view", view);
@@ -132,7 +152,7 @@ void LIGHT_CASTER::light_caster::show(std::string & message)
 		lightShader.setMat4("model", model);
 
 		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
