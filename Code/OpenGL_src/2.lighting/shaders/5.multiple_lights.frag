@@ -100,3 +100,14 @@ vec3 CaleDirLight(DirLight light, vec3 normal, vec3 viewDir){
 
 	return ambient + diffuse + specular;
 }
+
+vec3 CalePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+	//ambient
+	vec3 ambient = light.ambient * texture(material.diffuse, TexCoords).rgb;
+}
+
+vec3 CaleSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+
+}
