@@ -42,7 +42,7 @@ struct SpotLight{
 	float cutOff;
 	float outerCutOff;
 
-	float contant;
+	float constant;
 	float linear;
 	float quadratic;
 };
@@ -51,7 +51,7 @@ struct SpotLight{
 
 uniform Material material;
 uniform DirLight dirLight;
-uniform PointLight pointLight[NR_POINT_LIGHTS];
+uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight spotLight;
 uniform vec3 viewPos;
 
@@ -60,30 +60,16 @@ vec3 CalePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CaleSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main(){
-	//ambient
-	vec3 ambient = spotLight.ambient * texture(material.diffuse, TexCoords).rgb;
-	//diffuse
+	vec3 result;
 	vec3 norm = normalize(Normal);
-	vec3 lightDir = normalize(spotLight.position - FragPos);
-	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = spotLight.diffuse * diff * texture(material.diffuse, TexCoords).rgb;
-	//specular
 	vec3 viewDir = normalize(viewPos - FragPos);
-	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0),material.shininess);
-	vec3 specular = spotLight.specular * spec * texture(material.specular, TexCoords).rgb;
+	result += CaleDirLight(dirLight, norm, viewDir);
+	for(int i=0; i < NR_POINT_LIGHTS; i++)
+		result += CalePointLight(pointLights[i], norm, FragPos, viewDir);
 
-	float theta = dot(normalize(spotLight.direction), -lightDir);
-	float epsilon = spotLight.cutOff - spotLight.outerCutOff;
-	float intensity = clamp((theta - spotLight.outerCutOff)/epsilon, 0.0, 1.0);
-	diffuse *= intensity;
-	specular *= intensity;
-
-	float distance = length(spotLight.position - FragPos);
-	float attenuation = 1.0 / (spotLight.contant + spotLight.linear * distance + spotLight.quadratic * (distance * distance));
-
-	vec3 result = ambient + diffuse + specular;
-	FragColor = vec4(result * attenuation , 1.0);
+	result += CaleSpotLight(spotLight, norm, FragPos, viewDir);
+	
+	FragColor = vec4(result, 1.0);
 }
 
 vec3 CaleDirLight(DirLight light, vec3 normal, vec3 viewDir){
@@ -105,9 +91,46 @@ vec3 CalePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
 	//ambient
 	vec3 ambient = light.ambient * texture(material.diffuse, TexCoords).rgb;
+	//diffuse
+	vec3 lightDir=normalize(light.position - fragPos);
+	float diff = max(dot(lightDir, normal), 0.0);
+	vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoords).rgb;
+	//specular
+	vec3 reflectDir = reflect(-lightDir, normal);
+	float spec = pow(max(dot(reflectDir, viewDir), 0.0), material.shininess);
+	vec3 specular = light.specular * spec * texture(material.specular, TexCoords).rgb;
+
+	float direction = length(light.position - fragPos);
+	float attenuation = 1.0/(light.constant + 
+		direction * light.linear + 
+		light.quadratic * (direction * direction));
+
+	return (ambient + diffuse + specular) * attenuation;
 }
 
 vec3 CaleSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
+	//ambient
+	vec3 ambient = light.ambient * texture(material.diffuse, TexCoords).rgb;
+	//diffuse
+	vec3 lightDir = normalize(light.position - fragPos);
+	float diff = max(dot(lightDir, normal), 0.0);
+	vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoords).rgb;
+	//specular
+	vec3 reflectDir = reflect(-lightDir, normal);
+	float spec = pow(max(dot(reflectDir, viewDir), 0.0), material.shininess);
+	vec3 specular = light.specular * spec * texture(material.specular, TexCoords).rgb;
 
+	float direction = length(light.position - fragPos);
+	float attenuation = 1.0/(light.constant + light.linear * direction + light.quadratic * (direction * direction));
+
+	float theta = dot(lightDir, normalize(-light.direction));
+	float epsilon = light.cutOff - light.outerCutOff;
+	float intensity = clamp((theta - light.outerCutOff)/epsilon, 0.0, 1.0);
+
+	ambient *= intensity;
+	diffuse *= intensity;
+	specular *= intensity;
+
+	return (ambient + diffuse + specular) * attenuation;
 }

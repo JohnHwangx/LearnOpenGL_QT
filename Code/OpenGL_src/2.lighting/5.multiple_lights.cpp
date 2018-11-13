@@ -99,18 +99,53 @@ void MULTIPLE_LIGHTS::multiple_lights::show(std::string & message)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		cubeShader.use();
-		cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-		cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-		cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		cubeShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+		cubeShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+		cubeShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
-		cubeShader.setFloat("light.constant", 1.0f);
-		cubeShader.setFloat("light.linear", 0.09f);
-		cubeShader.setFloat("light.quadratic", 0.032f);
+		cubeShader.setVec3("pointLights[0].position", VERTICES::pointLightPositions[0]);
+		cubeShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		cubeShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		cubeShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.setFloat("pointLights[0].constant", 1.0f);
+		cubeShader.setFloat("pointLights[0].linear", 0.09f);
+		cubeShader.setFloat("pointLights[0].quadratic", 0.032f);
 
-		cubeShader.setFloat("light.cutOff", cos(radians(12.5f)));
-		cubeShader.setFloat("light.outerCutOff", cos(radians(17.5f)));
-		cubeShader.setVec3("light.position", camera.Position);
-		cubeShader.setVec3("light.direction", camera.Front);
+		cubeShader.setVec3("pointLights[1].position", VERTICES::pointLightPositions[1]);
+		cubeShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		cubeShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		cubeShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.setFloat("pointLights[1].constant", 1.0f);
+		cubeShader.setFloat("pointLights[1].linear", 0.09f);
+		cubeShader.setFloat("pointLights[1].quadratic", 0.032f);
+
+		cubeShader.setVec3("pointLights[2].position", VERTICES::pointLightPositions[2]);
+		cubeShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+		cubeShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+		cubeShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.setFloat("pointLights[2].constant", 1.0f);
+		cubeShader.setFloat("pointLights[2].linear", 0.09f);
+		cubeShader.setFloat("pointLights[2].quadratic", 0.032f);
+
+		cubeShader.setVec3("pointLights[3].position", VERTICES::pointLightPositions[3]);
+		cubeShader.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+		cubeShader.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+		cubeShader.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.setFloat("pointLights[3].constant", 1.0f);
+		cubeShader.setFloat("pointLights[3].linear", 0.09f);
+		cubeShader.setFloat("pointLights[3].quadratic", 0.032f);
+
+		cubeShader.setVec3("spotLight.position", camera.Position);
+		cubeShader.setVec3("spotLight.direction", camera.Front);
+		cubeShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+		cubeShader.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+		cubeShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.setFloat("spotLight.constant", 1.0f);
+		cubeShader.setFloat("spotLight.linear", 0.09f);
+		cubeShader.setFloat("spotLight.quadratic", 0.032f); 
+		cubeShader.setFloat("spotLight.cutOff", cos(radians(12.5f)));
+		cubeShader.setFloat("spotLight.outerCutOff", cos(radians(15.0f)));
 
 		cubeShader.setFloat("material.shininess", 32.0f);
 		cubeShader.setVec3("viewPos", camera.Position);
@@ -143,10 +178,10 @@ void MULTIPLE_LIGHTS::multiple_lights::show(std::string & message)
 		glBindVertexArray(lightVAO);
 		for (unsigned int i = 0; i < 4; i++)
 		{
-			mat4 model;
+			mat4 model = glm::mat4();
 			model = translate(model, VERTICES::pointLightPositions[i]);
 			model = scale(model, vec3(0.2f));
-			lightShader.setMat4("mdoel", model);
+			lightShader.setMat4("model", model);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
@@ -154,7 +189,7 @@ void MULTIPLE_LIGHTS::multiple_lights::show(std::string & message)
 		glfwPollEvents();
 	}
 	glDeleteVertexArrays(1, &cubeVAO);
-	glDeleteVertexArrays(1, &lightShader);
+	glDeleteVertexArrays(1, &lightVAO);
 	glDeleteBuffers(1, &VBO);
 
 	glfwTerminate();
