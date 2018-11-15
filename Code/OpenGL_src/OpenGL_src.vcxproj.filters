@@ -66,6 +66,12 @@
     <ClCompile Include="2.lighting\5.multiple_lights.cpp">
       <Filter>2.lighting</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h">
@@ -152,6 +158,12 @@
       <Filter>2.lighting</Filter>
     </ClInclude>
     <ClInclude Include="Vertices.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
