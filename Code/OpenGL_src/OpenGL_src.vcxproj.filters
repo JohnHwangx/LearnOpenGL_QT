@@ -72,6 +72,9 @@
     <ClCompile Include="Model.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="2.lighting\6.model_loading.cpp">
+      <Filter>2.lighting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h">
@@ -126,6 +129,15 @@
       <Filter>2.lighting\shaders</Filter>
     </None>
     <None Include="2.lighting\shaders\1.1.lamp.frag">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\6.model_loading.h">
+      <Filter>2.lighting</Filter>
+    </None>
+    <None Include="2.lighting\shaders\6.model_loading.vert">
+      <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="2.lighting\shaders\6.model_loading.frag">
       <Filter>2.lighting\shaders</Filter>
     </None>
   </ItemGroup>

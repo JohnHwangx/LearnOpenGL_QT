@@ -165,6 +165,7 @@
     <ClCompile Include="2.lighting\3.lighting_maps.cpp" />
     <ClCompile Include="2.lighting\4.light_caster.cpp" />
     <ClCompile Include="2.lighting\5.multiple_lights.cpp" />
+    <ClCompile Include="2.lighting\6.model_loading.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -179,6 +180,7 @@
     <None Include="1.getting_start\shaders\4.1.textures.frag" />
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.frag" />
     <None Include="1.getting_start\shaders\7.3.camera_mouse_zoom.vert" />
+    <None Include="2.lighting\6.model_loading.h" />
     <None Include="2.lighting\shaders\1.1.lamp.frag" />
     <None Include="2.lighting\shaders\1.1.lamp.vert" />
     <None Include="2.lighting\shaders\1.1.base_lighting.frag" />
@@ -191,6 +193,8 @@
     <None Include="2.lighting\shaders\4.light_caster.vert" />
     <None Include="2.lighting\shaders\5.multiple_lights.frag" />
     <None Include="2.lighting\shaders\5.multiple_lights.vert" />
+    <None Include="2.lighting\shaders\6.model_loading.frag" />
+    <None Include="2.lighting\shaders\6.model_loading.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="1.getting_start\7.3.camera.h" />

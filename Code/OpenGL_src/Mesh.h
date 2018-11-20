@@ -15,12 +15,15 @@ namespace MESH {
 		glm::vec3 Postion;
 		glm::vec3 Normal;
 		glm::vec2 TexCoords;
+		glm::vec3 Tangent;
+		glm::vec3 BiTangent;
 	};
 
 	struct Texture
 	{
 		unsigned int id;
 		std::string type;
+		std::string path;// 我们储存纹理的路径用于与其它纹理进行比较
 	};
 
 	class Mesh {
@@ -32,6 +35,7 @@ namespace MESH {
 
 		/*函数*/
 		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+		~Mesh();
 		void Draw(Shader shader);
 	private:
 		/*渲染器*/
