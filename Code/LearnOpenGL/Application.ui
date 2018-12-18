@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="getting_start_2">
        <attribute name="title">
@@ -79,19 +79,18 @@
         <string>2.光照</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="1">
-         <widget class="QPushButton" name="material">
-          <property name="text">
-           <string>材质</string>
+        <item row="0" column="6">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QPushButton" name="basic_lighting">
-          <property name="text">
-           <string>基础光照</string>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>312</width>
+            <height>20</height>
+           </size>
           </property>
-         </widget>
+         </spacer>
         </item>
         <item row="0" column="2">
          <widget class="QPushButton" name="lighting_map">
@@ -113,18 +112,12 @@
           </property>
          </spacer>
         </item>
-        <item row="0" column="5">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+        <item row="0" column="4">
+         <widget class="QPushButton" name="multiple_lights">
+          <property name="text">
+           <string>多光源</string>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>312</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+         </widget>
         </item>
         <item row="0" column="3">
          <widget class="QPushButton" name="light_caster">
@@ -133,10 +126,24 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="4">
-         <widget class="QPushButton" name="multiple_lights">
+        <item row="0" column="1">
+         <widget class="QPushButton" name="material">
           <property name="text">
-           <string>多光源</string>
+           <string>材质</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QPushButton" name="basic_lighting">
+          <property name="text">
+           <string>基础光照</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="QPushButton" name="model_loading">
+          <property name="text">
+           <string>模型加载</string>
           </property>
          </widget>
         </item>
@@ -147,14 +154,21 @@
         <string>3.高级OpenGL</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="5">
+        <item row="0" column="2">
          <widget class="QPushButton" name="blending">
           <property name="text">
            <string>混合</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="4">
+        <item row="0" column="1">
+         <widget class="QPushButton" name="stencil_testing">
+          <property name="text">
+           <string>模板测试</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
          <widget class="QPushButton" name="framebuffer">
           <property name="text">
            <string>帧缓冲</string>
@@ -162,48 +176,41 @@
          </widget>
         </item>
         <item row="0" column="6">
-         <widget class="QPushButton" name="stencil_testing">
-          <property name="text">
-           <string>模板测试</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QPushButton" name="cubemaps">
-          <property name="text">
-           <string>立方体贴图</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QPushButton" name="anti_aliasing">
-          <property name="text">
-           <string>抗锯齿</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="depth_testing">
-          <property name="text">
-           <string>深度测试</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
          <widget class="QPushButton" name="face_culling">
           <property name="text">
            <string>面剔除</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="depth_testing">
+          <property name="text">
+           <string>深度测试</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="QPushButton" name="anti_aliasing">
+          <property name="text">
+           <string>抗锯齿</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="8">
          <widget class="QPushButton" name="instancing">
           <property name="text">
            <string>实例化</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
+        <item row="0" column="4">
+         <widget class="QPushButton" name="cubemaps">
+          <property name="text">
+           <string>立方体贴图</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
          <spacer name="verticalSpacer_3">
           <property name="orientation">
            <enum>Qt::Vertical</enum>

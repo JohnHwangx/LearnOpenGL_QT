@@ -25,6 +25,9 @@
     <Filter Include="2.lighting\shaders">
       <UniqueIdentifier>{c106cf27-ceda-44c1-b3be-8728aa13a4ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3.advance_opengl">
+      <UniqueIdentifier>{995f79f4-ff06-440b-b109-b403290c785d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ThirdParty\src\glad.c">
@@ -74,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="2.lighting\6.model_loading.cpp">
       <Filter>2.lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="3.advance_opengl\1.depth_testing.cpp">
+      <Filter>3.advance_opengl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +145,9 @@
     </None>
     <None Include="2.lighting\shaders\6.model_loading.frag">
       <Filter>2.lighting\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\1.depth_testing.h">
+      <Filter>3.advance_opengl</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

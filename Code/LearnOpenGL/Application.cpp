@@ -15,6 +15,7 @@ Application::Application(QWidget *parent)
 	connect(ui.lighting_map, &QPushButton::clicked, this, &Application::on_lighting_maps);
 	connect(ui.light_caster, &QPushButton::clicked, this, &Application::on_light_caster);
 	connect(ui.multiple_lights, &QPushButton::clicked, this, &Application::on_multiple_light);
+	connect(ui.model_loading, &QPushButton::clicked, this, &Application::on_model_loading);
 }
 
 void Application::on_shader_uniform()
@@ -75,6 +76,14 @@ void Application::on_multiple_light()
 {
 	std::string message;
 	MULTIPLE_LIGHTS::multiple_lights show;
+	show.show(message);
+	ui.textBrowser->setText(QString::fromStdString(message));
+}
+
+void Application::on_model_loading()
+{
+	std::string message;
+	MODEL_LOADING::model_loading show;
 	show.show(message);
 	ui.textBrowser->setText(QString::fromStdString(message));
 }

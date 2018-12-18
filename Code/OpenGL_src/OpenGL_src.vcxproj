@@ -166,6 +166,7 @@
     <ClCompile Include="2.lighting\4.light_caster.cpp" />
     <ClCompile Include="2.lighting\5.multiple_lights.cpp" />
     <ClCompile Include="2.lighting\6.model_loading.cpp" />
+    <ClCompile Include="3.advance_opengl\1.depth_testing.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -195,6 +196,7 @@
     <None Include="2.lighting\shaders\5.multiple_lights.vert" />
     <None Include="2.lighting\shaders\6.model_loading.frag" />
     <None Include="2.lighting\shaders\6.model_loading.vert" />
+    <None Include="3.advance_opengl\1.depth_testing.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="1.getting_start\7.3.camera.h" />
