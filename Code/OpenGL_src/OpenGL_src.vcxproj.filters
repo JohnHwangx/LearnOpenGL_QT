@@ -28,6 +28,9 @@
     <Filter Include="3.advance_opengl">
       <UniqueIdentifier>{995f79f4-ff06-440b-b109-b403290c785d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3.advance_opengl\shaders">
+      <UniqueIdentifier>{4bd2c1d1-2c74-4d22-8b0a-6945a8e90e61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ThirdParty\src\glad.c">
@@ -80,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="3.advance_opengl\1.depth_testing.cpp">
       <Filter>3.advance_opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="3.advance_opengl\3.stencil_testing.cpp">
+      <Filter>3.advance_opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="3.advance_opengl\2.stencil_testing.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +158,12 @@
     <None Include="3.advance_opengl\1.depth_testing.h">
       <Filter>3.advance_opengl</Filter>
     </None>
+    <None Include="3.advance_opengl\shaders\1.depth_testing.vert">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\1.depth_testing.frag">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -186,6 +201,9 @@
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="3.advance_opengl\2.stencil_testing.h">
+      <Filter>3.advance_opengl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
