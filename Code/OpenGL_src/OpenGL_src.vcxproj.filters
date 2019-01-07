@@ -84,11 +84,8 @@
     <ClCompile Include="3.advance_opengl\1.depth_testing.cpp">
       <Filter>3.advance_opengl</Filter>
     </ClCompile>
-    <ClCompile Include="3.advance_opengl\3.stencil_testing.cpp">
-      <Filter>3.advance_opengl</Filter>
-    </ClCompile>
     <ClCompile Include="3.advance_opengl\2.stencil_testing.cpp">
-      <Filter>源文件</Filter>
+      <Filter>3.advance_opengl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +156,15 @@
       <Filter>3.advance_opengl</Filter>
     </None>
     <None Include="3.advance_opengl\shaders\1.depth_testing.vert">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\2.stencil_testing.vert">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\2.stencil_testing.frag">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\2.stencil_single_color.frag">
       <Filter>3.advance_opengl\shaders</Filter>
     </None>
     <None Include="3.advance_opengl\shaders\1.depth_testing.frag">

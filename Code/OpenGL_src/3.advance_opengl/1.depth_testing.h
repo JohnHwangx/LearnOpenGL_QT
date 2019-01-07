@@ -14,7 +14,8 @@ namespace DEPTH_TESTING
 	class depth_testing {
 	public:
 		depth_testing();
-		~depth_testing(); void show(std::string& message);
+		~depth_testing(); 
+		void show(std::string& message);
 	private:
 		unsigned int SCR_WIDTH;
 		unsigned int SCR_HEIGHT;
