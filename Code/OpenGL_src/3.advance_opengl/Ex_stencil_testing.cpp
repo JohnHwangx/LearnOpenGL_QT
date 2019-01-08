@@ -44,33 +44,95 @@ void ex_stencil_testing::show(std::string & message)
 
 	Shader cubeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
 		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.frag");
-	Shader planeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
-		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.frag");
+	/*Shader planeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
+		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing_plane.frag");*/
+
+	GLfloat vertices[] = {
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+		-1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		 1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		 1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		 1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		-1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+	};
 
 	unsigned int cubeVAO, cubeVBO;
 	glGenVertexArrays(1, &cubeVAO);
 	glBindVertexArray(cubeVAO);
 	glGenBuffers(1, &cubeVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES::vertices_texture), VERTICES::vertices_texture, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 3));
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 6));
+	glEnableVertexAttribArray(2);
 
-	float vertices[] = {
+	/*float planeVertices[] = {
 
-		-1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 
-		1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 
-		1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 
-		-1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f,
-		-1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f,
+		-1.0f, -1.0f, -0.5f,
+		1.0f, -1.0f, -0.5f, 
+		1.0f,  1.0f, -0.5f, 
+		1.0f,  1.0f, -0.5f, 
+		-1.0f,  1.0f, -0.5f,
+		-1.0f, -1.0f, -0.5f,
 
 	};
 
 	unsigned int planeVAO, planeVBO;
-
+	glGenVertexArrays(1, &planeVAO);
+	glGenBuffers(1, &planeVBO);
+	glBindVertexArray(planeVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glBindVertexArray(0);*/
 
 	unsigned int kittyTex = loadTexture("../../Resource/Kitty.png");
 	unsigned int puppyTex = loadTexture("../../Resource/puppy.png");
@@ -114,35 +176,33 @@ void ex_stencil_testing::show(std::string & message)
 		glBindVertexArray(cubeVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36); 
 		
-		//glEnable(GL_STENCIL_TEST);
+		glEnable(GL_STENCIL_TEST);
 
-		//// Draw floor
-		//glStencilFunc(GL_ALWAYS, 1, 0xFF);
-		//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-		//glStencilMask(0xFF);
-		//glDepthMask(GL_FALSE);
-		//glClear(GL_STENCIL_BUFFER_BIT);
-		mat4 planeModel = scale(model, vec3(2,2,1));
-		cubeShader.setMat4("model", planeModel);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		// Draw floor
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glStencilMask(0xFF);
+		glDepthMask(GL_FALSE);
+		glClear(GL_STENCIL_BUFFER_BIT);
 
-		//// Draw cube reflection
-		//glStencilFunc(GL_EQUAL, 1, 0xFF);
-		//glStencilMask(0x00);
-		//glDepthMask(GL_TRUE);
+		glDrawArrays(GL_TRIANGLES, 36, 6);
+
+		// Draw cube reflection
+		glStencilFunc(GL_EQUAL, 1, 0xFF);
+		glStencilMask(0x00);
+		glDepthMask(GL_TRUE);
 
 		model = glm::scale(
 			glm::translate(model, glm::vec3(0, 0, -1)),
 			glm::vec3(1, 1, -1)
 		);
 		cubeShader.setMat4("model", model);
+
+		cubeShader.setVec3("overrideColor", 1.0f, 0.0f, 0.0f);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+		cubeShader.setVec3("overrideColor", 1.0f, 1.0f, 1.0f);
 
-		//glDisable(GL_STENCIL_TEST);
-
-		/*glStencilFunc(GL_EQUAL, 1, 0xFF);
-		glStencilMask(0x00);
-		glDepthMask(GL_TRUE);*/
+		glDisable(GL_STENCIL_TEST);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
