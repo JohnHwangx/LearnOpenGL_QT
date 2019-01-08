@@ -6,6 +6,8 @@ using namespace Ex_STENCIL_TESTING;
 
 ex_stencil_testing::ex_stencil_testing()
 {
+	SCR_WIDTH = 1200;
+	SCR_HEIGHT = 1200;
 }
 
 ex_stencil_testing::~ex_stencil_testing()
@@ -27,11 +29,6 @@ void ex_stencil_testing::show(std::string & message)
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_callback);
-	//glfwSetCursorPosCallback(window, mousemove_callback);
-	//glfwSetScrollCallback(window, scroll_callback);
-
-	// tell GLFW to capture our mouse
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -42,8 +39,8 @@ void ex_stencil_testing::show(std::string & message)
 
 	glEnable(GL_DEPTH_TEST);
 
-	Shader cubeShader("../OpenGL_src/2.lighting/shaders/3.lighting_maps.vert",
-		"../OpenGL_src/2.lighting/shaders/3.lighting_maps.frag");
+	Shader cubeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
+		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.frag");
 	Shader lightShader("../OpenGL_src/2.lighting/shaders/1.1.lamp.vert",
 		"../OpenGL_src/2.lighting/shaders/1.1.lamp.frag");
 
@@ -52,23 +49,25 @@ void ex_stencil_testing::show(std::string & message)
 	glBindVertexArray(cubeVAO);
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES::vertices_normal_texture), VERTICES::vertices_normal_texture, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES::vertices_texture), VERTICES::vertices_texture, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 3));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 6));
-	glEnableVertexAttribArray(2);
 
 	unsigned int kittyTex = loadTexture("../../Resource/Kitty.png");
 	unsigned int puppyTex = loadTexture("../../Resource/puppy.png");
+
+	cubeShader.use();
+	cubeShader.setInt("texKitten", 0);
+	cubeShader.setInt("texPuppy", 1);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
 
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, kittyTex);
@@ -77,11 +76,28 @@ void ex_stencil_testing::show(std::string & message)
 
 		cubeShader.use();
 
-		mat4 projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		// create transformations
+		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+		//model = translate(model, vec3(0.0f, 3.0f, 0.0f));
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		view = glm::lookAt(
+			glm::vec3(1.5f, 1.5f, 1.5f),
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 0.0f, 1.0f)
+		);
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		cubeShader.setMat4("projection", projection);
-		mat4 view = camera.GetViewMatrix();
 		cubeShader.setMat4("view", view);
+		cubeShader.setMat4("model", model);
 
+		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 
 	glDeleteVertexArrays(1, &cubeVAO);
@@ -116,6 +132,9 @@ unsigned int ex_stencil_testing::loadTexture(const char * path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
+	else {
+		cout << "Failed to load texture" << endl;
+	}
 	return textureId;
 }
 
@@ -129,12 +148,5 @@ void ex_stencil_testing::processInput(GLFWwindow * window)
 
 void ex_stencil_testing::framebuffer_callback(GLFWwindow * window, int width, int height)
 {
-}
-
-void ex_stencil_testing::mousemove_callback(GLFWwindow * window, double xPos, double yPos)
-{
-}
-
-void ex_stencil_testing::scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
-{
+	glViewport(0, 0, width, height);
 }
