@@ -38,22 +38,39 @@ void ex_stencil_testing::show(std::string & message)
 	}
 
 	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_STENCIL_TEST);
+	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);//£¿£¿
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//??
 
 	Shader cubeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
 		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.frag");
-	Shader lightShader("../OpenGL_src/2.lighting/shaders/1.1.lamp.vert",
-		"../OpenGL_src/2.lighting/shaders/1.1.lamp.frag");
+	Shader planeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
+		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.frag");
 
-	unsigned int cubeVAO, VBO;
+	unsigned int cubeVAO, cubeVBO;
 	glGenVertexArrays(1, &cubeVAO);
 	glBindVertexArray(cubeVAO);
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glGenBuffers(1, &cubeVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES::vertices_texture), VERTICES::vertices_texture, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
 	glEnableVertexAttribArray(1);
+
+	float vertices[] = {
+
+		-1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 
+		1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 
+		1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 
+		-1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f,
+		-1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f,
+
+	};
+
+	unsigned int planeVAO, planeVBO;
+
 
 	unsigned int kittyTex = loadTexture("../../Resource/Kitty.png");
 	unsigned int puppyTex = loadTexture("../../Resource/puppy.png");
@@ -61,6 +78,16 @@ void ex_stencil_testing::show(std::string & message)
 	cubeShader.use();
 	cubeShader.setInt("texKitten", 0);
 	cubeShader.setInt("texPuppy", 1);
+
+	// create transformations
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+	view = glm::lookAt(
+		glm::vec3(2.5f, 2.5f, 2.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 1.0f)
+	);
+	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -75,33 +102,54 @@ void ex_stencil_testing::show(std::string & message)
 		glBindTexture(GL_TEXTURE_2D, puppyTex);
 
 		cubeShader.use();
-
-		// create transformations
-		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
-		//model = translate(model, vec3(0.0f, 3.0f, 0.0f));
-		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		view = glm::lookAt(
-			glm::vec3(1.5f, 1.5f, 1.5f),
-			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 0.0f, 1.0f)
-		);
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		cubeShader.setMat4("projection", projection);
 		cubeShader.setMat4("view", view);
+
+		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 		cubeShader.setMat4("model", model);
 
+		//glStencilMask(0x00);
+
 		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36); 
+		
+		//glEnable(GL_STENCIL_TEST);
+
+		//// Draw floor
+		//glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		//glStencilMask(0xFF);
+		//glDepthMask(GL_FALSE);
+		//glClear(GL_STENCIL_BUFFER_BIT);
+		mat4 planeModel = scale(model, vec3(2,2,1));
+		cubeShader.setMat4("model", planeModel);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		//// Draw cube reflection
+		//glStencilFunc(GL_EQUAL, 1, 0xFF);
+		//glStencilMask(0x00);
+		//glDepthMask(GL_TRUE);
+
+		model = glm::scale(
+			glm::translate(model, glm::vec3(0, 0, -1)),
+			glm::vec3(1, 1, -1)
+		);
+		cubeShader.setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		//glDisable(GL_STENCIL_TEST);
+
+		/*glStencilFunc(GL_EQUAL, 1, 0xFF);
+		glStencilMask(0x00);
+		glDepthMask(GL_TRUE);*/
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
 	glDeleteVertexArrays(1, &cubeVAO);
-	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &cubeVBO);
 
 	glfwTerminate();
 }

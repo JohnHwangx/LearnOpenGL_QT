@@ -206,6 +206,7 @@
     <None Include="3.advance_opengl\shaders\2.stencil_testing.vert" />
     <None Include="3.advance_opengl\shaders\ex_stencil_testing.frag" />
     <None Include="3.advance_opengl\shaders\ex_stencil_testing.vert" />
+    <None Include="3.advance_opengl\shaders\ex_stencil_testing_plane.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="1.getting_start\7.3.camera.h" />
