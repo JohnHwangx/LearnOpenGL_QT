@@ -38,14 +38,9 @@ void ex_stencil_testing::show(std::string & message)
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_STENCIL_TEST);
-	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);//？？
-	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//??
 
 	Shader cubeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
 		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.frag");
-	/*Shader planeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
-		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing_plane.frag");*/
 
 	GLfloat vertices[] = {
 		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
@@ -111,29 +106,6 @@ void ex_stencil_testing::show(std::string & message)
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 6));
 	glEnableVertexAttribArray(2);
 
-	/*float planeVertices[] = {
-
-		-1.0f, -1.0f, -0.5f,
-		1.0f, -1.0f, -0.5f, 
-		1.0f,  1.0f, -0.5f, 
-		1.0f,  1.0f, -0.5f, 
-		-1.0f,  1.0f, -0.5f,
-		-1.0f, -1.0f, -0.5f,
-
-	};
-
-	unsigned int planeVAO, planeVBO;
-	glGenVertexArrays(1, &planeVAO);
-	glGenBuffers(1, &planeVBO);
-	glBindVertexArray(planeVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glBindVertexArray(0);*/
-
 	unsigned int kittyTex = loadTexture("../../Resource/Kitty.png");
 	unsigned int puppyTex = loadTexture("../../Resource/puppy.png");
 
@@ -174,13 +146,13 @@ void ex_stencil_testing::show(std::string & message)
 		//glStencilMask(0x00);
 
 		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36); 
+		glDrawArrays(GL_TRIANGLES, 0, 36); // 绘制最上面的cube
 		
 		glEnable(GL_STENCIL_TEST);
 
 		// Draw floor
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//模板测试失败；模板测试通过，深度测试失败；模板和深度都通过；
 		glStencilMask(0xFF);
 		glDepthMask(GL_FALSE);
 		glClear(GL_STENCIL_BUFFER_BIT);
@@ -198,7 +170,7 @@ void ex_stencil_testing::show(std::string & message)
 		);
 		cubeShader.setMat4("model", model);
 
-		cubeShader.setVec3("overrideColor", 1.0f, 0.0f, 0.0f);
+		cubeShader.setVec3("overrideColor", 0.3f, 0.3f, 0.3f);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		cubeShader.setVec3("overrideColor", 1.0f, 1.0f, 1.0f);
 
