@@ -123,58 +123,53 @@ void ex_stencil_testing::show(std::string & message)
 	);
 	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, kittyTex);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, puppyTex);
+
+	cubeShader.use();
+	cubeShader.setMat4("projection", projection);
+	cubeShader.setMat4("view", view);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
 
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, kittyTex);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, puppyTex);
-
-		cubeShader.use();
-		cubeShader.setMat4("projection", projection);
-		cubeShader.setMat4("view", view);
-
+		// Draw cube
 		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 		cubeShader.setMat4("model", model);
-
-		//glStencilMask(0x00);
-
-		glBindVertexArray(cubeVAO);
+		cubeShader.setVec3("overrideColor", 1.0f, 1.0f, 1.0f);
 		glDrawArrays(GL_TRIANGLES, 0, 36); // 绘制最上面的cube
-		
+
 		glEnable(GL_STENCIL_TEST);
 
 		// Draw floor
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);//总是通过测试，不丢弃
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//模板测试失败；模板测试通过，深度测试失败；模板和深度都通过；
-		glStencilMask(0xFF);
-		glDepthMask(GL_FALSE);
-		glClear(GL_STENCIL_BUFFER_BIT);
+		glStencilMask(0xFF);// 模板值为0xFF
+		glDepthMask(GL_FALSE);// 禁止深度缓冲写入
+		glClear(GL_STENCIL_BUFFER_BIT);// 清空模板缓冲区
 
 		glDrawArrays(GL_TRIANGLES, 36, 6);
 
 		// Draw cube reflection
-		glStencilFunc(GL_EQUAL, 1, 0xFF);
-		glStencilMask(0x00);
-		glDepthMask(GL_TRUE);
+		glStencilFunc(GL_EQUAL, 1, 0xFF);// 当模板值等于参考值时，通过测试并被绘制
+		glStencilMask(0x00); // 模板值为0x00
+		glDepthMask(GL_TRUE);// 启用深度缓冲写入
 
 		model = glm::scale(
 			glm::translate(model, glm::vec3(0, 0, -1)),
 			glm::vec3(1, 1, -1)
 		);
 		cubeShader.setMat4("model", model);
-
 		cubeShader.setVec3("overrideColor", 0.3f, 0.3f, 0.3f);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		cubeShader.setVec3("overrideColor", 1.0f, 1.0f, 1.0f);
 
-		glDisable(GL_STENCIL_TEST);
+		glDisable(GL_STENCIL_TEST);// 禁用模板测试
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
