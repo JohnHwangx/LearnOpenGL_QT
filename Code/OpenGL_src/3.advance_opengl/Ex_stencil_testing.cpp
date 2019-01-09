@@ -1,3 +1,4 @@
+#define SECOND
 #include "Ex_stencil_testing.h"
 
 using namespace glm;
@@ -38,6 +39,13 @@ void ex_stencil_testing::show(std::string & message)
 	}
 
 	glEnable(GL_DEPTH_TEST);
+
+#ifdef SECOND
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+#endif // Second
+
 
 	Shader cubeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
 		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.frag");
@@ -132,6 +140,48 @@ void ex_stencil_testing::show(std::string & message)
 	cubeShader.setMat4("projection", projection);
 	cubeShader.setMat4("view", view);
 
+#ifdef SECOND
+
+	while (!glfwWindowShouldClose(window)) 
+	{
+		processInput(window);
+
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);//总是通过测试，不丢弃
+		glStencilMask(0xFF);// 模板值为0xFF
+		// Draw cube
+		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		cubeShader.setMat4("model", model);
+		cubeShader.setVec3("overrideColor", 1.0f, 1.0f, 1.0f);
+		glDrawArrays(GL_TRIANGLES, 0, 36); // 绘制最上面的cube
+
+		// Draw floor
+		glDepthMask(GL_FALSE);// 禁止深度缓冲写入
+		glDrawArrays(GL_TRIANGLES, 36, 6);
+
+		// Draw cube reflection
+		glStencilFunc(GL_EQUAL, 1, 0xFF);// 当模板值等于参考值时，通过测试并被绘制
+		glStencilMask(0x00); // 模板值为0x00
+		glDepthMask(GL_TRUE);// 启用深度缓冲写入
+
+		model = glm::scale(
+			glm::translate(model, glm::vec3(0, 0, -1)),
+			glm::vec3(1, 1, -1)
+		);
+		cubeShader.setMat4("model", model);
+		cubeShader.setVec3("overrideColor", 0.3f, 0.3f, 0.3f);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glStencilMask(0xFF); // 启用模板缓冲写入
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+#else
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
@@ -174,6 +224,8 @@ void ex_stencil_testing::show(std::string & message)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+#endif // DEBUG
 
 	glDeleteVertexArrays(1, &cubeVAO);
 	glDeleteBuffers(1, &cubeVBO);
