@@ -90,6 +90,9 @@
     <ClCompile Include="3.advance_opengl\Ex_stencil_testing.cpp">
       <Filter>3.advance_opengl</Filter>
     </ClCompile>
+    <ClCompile Include="3.advance_opengl\3.blending.cpp">
+      <Filter>3.advance_opengl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h">
@@ -224,6 +227,9 @@
       <Filter>3.advance_opengl</Filter>
     </ClInclude>
     <ClInclude Include="3.advance_opengl\Ex_stencil_testing.h">
+      <Filter>3.advance_opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="3.advance_opengl\3.blending.h">
       <Filter>3.advance_opengl</Filter>
     </ClInclude>
   </ItemGroup>
