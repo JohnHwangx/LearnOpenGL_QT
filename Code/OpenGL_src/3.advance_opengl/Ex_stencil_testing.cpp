@@ -1,4 +1,4 @@
-#define SECOND
+//#define SECOND
 #include "Ex_stencil_testing.h"
 
 using namespace glm;

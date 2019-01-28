@@ -169,6 +169,7 @@
     <ClCompile Include="3.advance_opengl\1.depth_testing.cpp" />
     <ClCompile Include="3.advance_opengl\2.stencil_testing.cpp" />
     <ClCompile Include="3.advance_opengl\3.blending.cpp" />
+    <ClCompile Include="3.advance_opengl\5_framebuffers.cpp" />
     <ClCompile Include="3.advance_opengl\Ex_stencil_testing.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="2.lighting\5.multiple_lights.h" />
     <ClInclude Include="3.advance_opengl\2.stencil_testing.h" />
     <ClInclude Include="3.advance_opengl\3.blending.h" />
+    <ClInclude Include="3.advance_opengl\5_framebuffers.h" />
     <ClInclude Include="3.advance_opengl\Ex_stencil_testing.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Mesh.h" />
