@@ -4,8 +4,23 @@ using namespace glm;
 using namespace std;
 using namespace FRAMEBUFFERS;
 
+bool framebuffers::firstMouse = true;
+float framebuffers::lastX = 0.0f;
+float framebuffers::lastY = 0.0f;
+CAMERA::Camera framebuffers::camera = vec3(0.0f, 0.0f, 3.0f);
+
 FRAMEBUFFERS::framebuffers::framebuffers()
 {
+	SCR_WIDTH = 1200;
+	SCR_HEIGHT = 1200;
+
+	deltaTime = 0.0f;
+	lastFrame = 0.0f;
+
+	firstMouse = true;
+	lastX = SCR_WIDTH / 2.0f;
+	lastY = SCR_HEIGHT / 2.0f;
+	camera = vec3(0.0f, 0.0f, 3.0f);
 }
 
 FRAMEBUFFERS::framebuffers::~framebuffers()
@@ -40,8 +55,10 @@ void FRAMEBUFFERS::framebuffers::show(std::string & message)
 		std::cout << "Failed to initialize GLAD" << std::endl;
 	}
 
-	Shader shader("", "");
-	Shader screenShader("", "");
+	Shader shader("../OpenGL_src/3.advance_opengl/shaders/5.framebuffers.vert", 
+		"../OpenGL_src/3.advance_opengl/shaders/5.framebuffers.frag");
+	Shader screenShader("../OpenGL_src/3.advance_opengl/shaders/5.1.framebuffers_screen.vert", 
+		"../OpenGL_src/3.advance_opengl/shaders/5.1.framebuffers_screen.frag");
 	//cube VAO
 	unsigned int cubeVAO, cubeVBO;
 	glGenVertexArrays(1, &cubeVAO);
@@ -76,8 +93,8 @@ void FRAMEBUFFERS::framebuffers::show(std::string & message)
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-	unsigned int cubeTexture = loadTexture("");
-	unsigned int floorTexture = loadTexture("");
+	unsigned int cubeTexture = loadTexture("../../Resource/marble.jpg");
+	unsigned int floorTexture = loadTexture("../../Resource/metal.png");
 
 	shader.use();
 	shader.setInt("texture1", 0);
@@ -132,40 +149,75 @@ void FRAMEBUFFERS::framebuffers::show(std::string & message)
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		model = translate(model, vec3(-1.0f, 0.0f, -1.0f));
-		shader.setMat4()
+		shader.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		model = mat4(1.0f);
+		model = translate(model, vec3(2.0f, 0.0f, 0.0f));
+		shader.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//floor
+		glBindVertexArray(planeVAO);
+		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		shader.setMat4("model", mat4(1.0f));
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDisable(GL_DEPTH_TEST);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		screenShader.use();
+		glBindVertexArray(quadVAO);
+		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+
 	}
+
+	glDeleteVertexArrays(1, &cubeVAO);
+	glDeleteVertexArrays(1, &planeVAO);
+	glDeleteVertexArrays(1, &quadVAO);
+	glDeleteBuffers(1, &cubeVBO);
+	glDeleteBuffers(1, &planeVBO);
+	glDeleteBuffers(1, &quadVBO);
+
+	glfwTerminate();
 }
 
 unsigned int FRAMEBUFFERS::framebuffers::loadTexture(const char * path)
 {
-	unsigned int textureId;
-	glGenTextures(1, &textureId);
-
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
-	if (data)
-	{
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+	int width, height, nrComponents;
+	unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+	if (data) {
 		GLenum format;
-		if (nrChannels == 1)
+		if (nrComponents == 1)
 			format = GL_RED;
-		else if (nrChannels == 3)
-			format == GL_RGB;
-		else if (nrChannels = 4)
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
 			format = GL_RGBA;
 
-		glBindTexture(GL_TEXTURE_2D, textureId);
+		glBindTexture(GL_TEXTURE_2D, textureID);
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
-	else {
-		cout << "Failed to load texture" << endl;
+	else
+	{
+		std::cout << "Texture failed to load at path: " << path << std::endl;
 	}
-	return textureId;
+	stbi_image_free(data);
+
+	return textureID;
 }
 
 void FRAMEBUFFERS::framebuffers::processInput(GLFWwindow * window)

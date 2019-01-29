@@ -188,6 +188,15 @@
     <None Include="3.advance_opengl\shaders\ex_stencil_testing_plane.frag">
       <Filter>3.advance_opengl\shaders</Filter>
     </None>
+    <None Include="3.advance_opengl\shaders\5.framebuffers.vert">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\5.1.framebuffers_screen.vert">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\5.1.framebuffers_screen.frag">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">

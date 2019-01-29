@@ -206,6 +206,9 @@
     <None Include="3.advance_opengl\shaders\2.stencil_single_color.frag" />
     <None Include="3.advance_opengl\shaders\2.stencil_testing.frag" />
     <None Include="3.advance_opengl\shaders\2.stencil_testing.vert" />
+    <None Include="3.advance_opengl\shaders\5.1.framebuffers_screen.frag" />
+    <None Include="3.advance_opengl\shaders\5.1.framebuffers_screen.vert" />
+    <None Include="3.advance_opengl\shaders\5.framebuffers.vert" />
     <None Include="3.advance_opengl\shaders\ex_stencil_testing.frag" />
     <None Include="3.advance_opengl\shaders\ex_stencil_testing.vert" />
     <None Include="3.advance_opengl\shaders\ex_stencil_testing_plane.frag" />
