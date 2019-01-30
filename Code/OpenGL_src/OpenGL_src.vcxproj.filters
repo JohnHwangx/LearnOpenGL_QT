@@ -96,6 +96,9 @@
     <ClCompile Include="3.advance_opengl\5_framebuffers.cpp">
       <Filter>3.advance_opengl</Filter>
     </ClCompile>
+    <ClCompile Include="3.advance_opengl\5_1_postprocessing.cpp">
+      <Filter>3.advance_opengl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h">
@@ -197,6 +200,12 @@
     <None Include="3.advance_opengl\shaders\5.1.framebuffers_screen.frag">
       <Filter>3.advance_opengl\shaders</Filter>
     </None>
+    <None Include="3.advance_opengl\shaders\5.1.postporcessing_inversion.frag">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\5.framebuffers.frag">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -245,6 +254,9 @@
       <Filter>3.advance_opengl</Filter>
     </ClInclude>
     <ClInclude Include="3.advance_opengl\5_framebuffers.h">
+      <Filter>3.advance_opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="3.advance_opengl\5_1_postprocessing.h">
       <Filter>3.advance_opengl</Filter>
     </ClInclude>
   </ItemGroup>

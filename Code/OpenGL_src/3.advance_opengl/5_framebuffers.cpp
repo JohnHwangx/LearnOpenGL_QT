@@ -101,28 +101,32 @@ void FRAMEBUFFERS::framebuffers::show(std::string & message)
 
 	screenShader.use();
 	screenShader.setInt("screenTexture", 0);
-
+	//创建帧缓冲对象
 	unsigned int framebuffer;
 	glGenFramebuffers(1, &framebuffer);
+	//绑定帧缓冲
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-
+	//生成纹理
 	unsigned int textureColorbuffer;
 	glGenTextures(1, &textureColorbuffer);
 	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//将纹理附加到帧缓冲对象。
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
 	// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
 	unsigned int rbo;
 	glGenRenderbuffers(1, &rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	//创建一个深度和模板渲染缓冲对象
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT);
+	//将渲染缓冲对象附加到帧缓冲的深度和模板附件上
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
+	//检查帧缓冲是否完整
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		cout << "ERROR::FRAMEBUFFER::Framebuffer is not complete!" << endl;
-
+	//要保证所有的渲染操作在主窗口中有视觉效果，我们需要再次激活默认帧缓冲，将它绑定到0
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	while (!glfwWindowShouldClose(window)) {
@@ -132,6 +136,7 @@ void FRAMEBUFFERS::framebuffers::show(std::string & message)
 
 		processInput(window);
 
+		//第一处理阶段（pass）
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		glEnable(GL_DEPTH_TEST);
 
@@ -162,7 +167,8 @@ void FRAMEBUFFERS::framebuffers::show(std::string & message)
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//第二处理阶段
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);//返回默认
 		glDisable(GL_DEPTH_TEST);
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);

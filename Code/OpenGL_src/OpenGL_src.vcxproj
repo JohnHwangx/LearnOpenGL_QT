@@ -169,6 +169,7 @@
     <ClCompile Include="3.advance_opengl\1.depth_testing.cpp" />
     <ClCompile Include="3.advance_opengl\2.stencil_testing.cpp" />
     <ClCompile Include="3.advance_opengl\3.blending.cpp" />
+    <ClCompile Include="3.advance_opengl\5_1_postprocessing.cpp" />
     <ClCompile Include="3.advance_opengl\5_framebuffers.cpp" />
     <ClCompile Include="3.advance_opengl\Ex_stencil_testing.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -208,6 +209,8 @@
     <None Include="3.advance_opengl\shaders\2.stencil_testing.vert" />
     <None Include="3.advance_opengl\shaders\5.1.framebuffers_screen.frag" />
     <None Include="3.advance_opengl\shaders\5.1.framebuffers_screen.vert" />
+    <None Include="3.advance_opengl\shaders\5.1.postporcessing_inversion.frag" />
+    <None Include="3.advance_opengl\shaders\5.framebuffers.frag" />
     <None Include="3.advance_opengl\shaders\5.framebuffers.vert" />
     <None Include="3.advance_opengl\shaders\ex_stencil_testing.frag" />
     <None Include="3.advance_opengl\shaders\ex_stencil_testing.vert" />
@@ -222,6 +225,7 @@
     <ClInclude Include="2.lighting\5.multiple_lights.h" />
     <ClInclude Include="3.advance_opengl\2.stencil_testing.h" />
     <ClInclude Include="3.advance_opengl\3.blending.h" />
+    <ClInclude Include="3.advance_opengl\5_1_postprocessing.h" />
     <ClInclude Include="3.advance_opengl\5_framebuffers.h" />
     <ClInclude Include="3.advance_opengl\Ex_stencil_testing.h" />
     <ClInclude Include="Camera.h" />
