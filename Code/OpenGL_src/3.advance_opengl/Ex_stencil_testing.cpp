@@ -1,3 +1,4 @@
+//#define SECOND
 #include "Ex_stencil_testing.h"
 
 using namespace glm;
@@ -38,14 +39,16 @@ void ex_stencil_testing::show(std::string & message)
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_STENCIL_TEST);
-	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);//？？
-	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//??
+
+#ifdef SECOND
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+#endif // Second
+
 
 	Shader cubeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
 		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.frag");
-	/*Shader planeShader("../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing.vert",
-		"../OpenGL_src/3.advance_opengl/shaders/ex_stencil_testing_plane.frag");*/
 
 	GLfloat vertices[] = {
 		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
@@ -111,29 +114,6 @@ void ex_stencil_testing::show(std::string & message)
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 6));
 	glEnableVertexAttribArray(2);
 
-	/*float planeVertices[] = {
-
-		-1.0f, -1.0f, -0.5f,
-		1.0f, -1.0f, -0.5f, 
-		1.0f,  1.0f, -0.5f, 
-		1.0f,  1.0f, -0.5f, 
-		-1.0f,  1.0f, -0.5f,
-		-1.0f, -1.0f, -0.5f,
-
-	};
-
-	unsigned int planeVAO, planeVBO;
-	glGenVertexArrays(1, &planeVAO);
-	glGenBuffers(1, &planeVBO);
-	glBindVertexArray(planeVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glBindVertexArray(0);*/
-
 	unsigned int kittyTex = loadTexture("../../Resource/Kitty.png");
 	unsigned int puppyTex = loadTexture("../../Resource/puppy.png");
 
@@ -151,62 +131,101 @@ void ex_stencil_testing::show(std::string & message)
 	);
 	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-	while (!glfwWindowShouldClose(window))
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, kittyTex);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, puppyTex);
+
+	cubeShader.use();
+	cubeShader.setMat4("projection", projection);
+	cubeShader.setMat4("view", view);
+
+#ifdef SECOND
+
+	while (!glfwWindowShouldClose(window)) 
 	{
 		processInput(window);
 
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, kittyTex);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, puppyTex);
-
-		cubeShader.use();
-		cubeShader.setMat4("projection", projection);
-		cubeShader.setMat4("view", view);
-
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);//总是通过测试，不丢弃
+		glStencilMask(0xFF);// 模板值为0xFF
+		// Draw cube
 		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 		cubeShader.setMat4("model", model);
-
-		//glStencilMask(0x00);
-
-		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36); 
-		
-		glEnable(GL_STENCIL_TEST);
+		cubeShader.setVec3("overrideColor", 1.0f, 1.0f, 1.0f);
+		glDrawArrays(GL_TRIANGLES, 0, 36); // 绘制最上面的cube
 
 		// Draw floor
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-		glStencilMask(0xFF);
-		glDepthMask(GL_FALSE);
-		glClear(GL_STENCIL_BUFFER_BIT);
-
+		glDepthMask(GL_FALSE);// 禁止深度缓冲写入
 		glDrawArrays(GL_TRIANGLES, 36, 6);
 
 		// Draw cube reflection
-		glStencilFunc(GL_EQUAL, 1, 0xFF);
-		glStencilMask(0x00);
-		glDepthMask(GL_TRUE);
+		glStencilFunc(GL_EQUAL, 1, 0xFF);// 当模板值等于参考值时，通过测试并被绘制
+		glStencilMask(0x00); // 模板值为0x00
+		glDepthMask(GL_TRUE);// 启用深度缓冲写入
 
 		model = glm::scale(
 			glm::translate(model, glm::vec3(0, 0, -1)),
 			glm::vec3(1, 1, -1)
 		);
 		cubeShader.setMat4("model", model);
-
-		cubeShader.setVec3("overrideColor", 1.0f, 0.0f, 0.0f);
+		cubeShader.setVec3("overrideColor", 0.3f, 0.3f, 0.3f);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		cubeShader.setVec3("overrideColor", 1.0f, 1.0f, 1.0f);
 
-		glDisable(GL_STENCIL_TEST);
+		glStencilMask(0xFF); // 启用模板缓冲写入
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+#else
+	while (!glfwWindowShouldClose(window))
+	{
+		processInput(window);
+
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// Draw cube
+		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		cubeShader.setMat4("model", model);
+		cubeShader.setVec3("overrideColor", 1.0f, 1.0f, 1.0f);
+		glDrawArrays(GL_TRIANGLES, 0, 36); // 绘制最上面的cube
+
+		glEnable(GL_STENCIL_TEST);
+
+		// Draw floor
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);//总是通过测试，不丢弃
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//模板测试失败；模板测试通过，深度测试失败；模板和深度都通过；
+		glStencilMask(0xFF);// 模板值为0xFF
+		glDepthMask(GL_FALSE);// 禁止深度缓冲写入
+		glClear(GL_STENCIL_BUFFER_BIT);// 清空模板缓冲区
+
+		glDrawArrays(GL_TRIANGLES, 36, 6);
+
+		// Draw cube reflection
+		glStencilFunc(GL_EQUAL, 1, 0xFF);// 当模板值等于参考值时，通过测试并被绘制
+		glStencilMask(0x00); // 模板值为0x00
+		glDepthMask(GL_TRUE);// 启用深度缓冲写入
+
+		model = glm::scale(
+			glm::translate(model, glm::vec3(0, 0, -1)),
+			glm::vec3(1, 1, -1)
+		);
+		cubeShader.setMat4("model", model);
+		cubeShader.setVec3("overrideColor", 0.3f, 0.3f, 0.3f);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glDisable(GL_STENCIL_TEST);// 禁用模板测试
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+#endif // DEBUG
 
 	glDeleteVertexArrays(1, &cubeVAO);
 	glDeleteBuffers(1, &cubeVBO);

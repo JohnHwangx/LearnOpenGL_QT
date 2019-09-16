@@ -96,6 +96,15 @@
     <ClCompile Include="3.advance_opengl\Ex_stencil_testing.cpp">
       <Filter>3.advance_opengl</Filter>
     </ClCompile>
+    <ClCompile Include="3.advance_opengl\3.blending.cpp">
+      <Filter>3.advance_opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="3.advance_opengl\5_framebuffers.cpp">
+      <Filter>3.advance_opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="3.advance_opengl\5_1_postprocessing.cpp">
+      <Filter>3.advance_opengl</Filter>
+    </ClCompile>
     <ClCompile Include="4.advance_lighting\1.ssao.cpp">
       <Filter>4.advance_lighting</Filter>
     </ClCompile>
@@ -191,6 +200,21 @@
     <None Include="3.advance_opengl\shaders\ex_stencil_testing_plane.frag">
       <Filter>3.advance_opengl\shaders</Filter>
     </None>
+    <None Include="3.advance_opengl\shaders\5.framebuffers.vert">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\5.1.framebuffers_screen.vert">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\5.1.framebuffers_screen.frag">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\5.1.postporcessing_inversion.frag">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
+    <None Include="3.advance_opengl\shaders\5.framebuffers.frag">
+      <Filter>3.advance_opengl\shaders</Filter>
+    </None>
     <None Include="4.advance_lighting\shaders\1_ssao_geometry.vert">
       <Filter>4.advance_lighting\shaders</Filter>
     </None>
@@ -251,6 +275,15 @@
       <Filter>3.advance_opengl</Filter>
     </ClInclude>
     <ClInclude Include="3.advance_opengl\Ex_stencil_testing.h">
+      <Filter>3.advance_opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="3.advance_opengl\3.blending.h">
+      <Filter>3.advance_opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="3.advance_opengl\5_framebuffers.h">
+      <Filter>3.advance_opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="3.advance_opengl\5_1_postprocessing.h">
       <Filter>3.advance_opengl</Filter>
     </ClInclude>
     <ClInclude Include="4.advance_lighting\1.ssao.h">
