@@ -5,3 +5,5 @@
 /Code/OpenGL_src/*.user
 /Bin
 /Obj
+*.user
+/Code/LearnOpenGL/.vs/LearnOpenGL/v15

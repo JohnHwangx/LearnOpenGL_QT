@@ -23,32 +23,32 @@
     <ProjectGuid>{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OpenGLsrc</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -169,6 +169,7 @@
     <ClCompile Include="3.advance_opengl\1.depth_testing.cpp" />
     <ClCompile Include="3.advance_opengl\2.stencil_testing.cpp" />
     <ClCompile Include="3.advance_opengl\Ex_stencil_testing.cpp" />
+    <ClCompile Include="4.advance_lighting\1.ssao.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -207,6 +208,12 @@
     <None Include="3.advance_opengl\shaders\ex_stencil_testing.frag" />
     <None Include="3.advance_opengl\shaders\ex_stencil_testing.vert" />
     <None Include="3.advance_opengl\shaders\ex_stencil_testing_plane.frag" />
+    <None Include="4.advance_lighting\shaders\1_ssao.frag" />
+    <None Include="4.advance_lighting\shaders\1_ssao.vert" />
+    <None Include="4.advance_lighting\shaders\1_ssao_blur.frag" />
+    <None Include="4.advance_lighting\shaders\1_ssao_geometry.frag" />
+    <None Include="4.advance_lighting\shaders\1_ssao_geometry.vert" />
+    <None Include="4.advance_lighting\shaders\1_ssao_lighting.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="1.getting_start\7.3.camera.h" />
@@ -217,6 +224,7 @@
     <ClInclude Include="2.lighting\5.multiple_lights.h" />
     <ClInclude Include="3.advance_opengl\2.stencil_testing.h" />
     <ClInclude Include="3.advance_opengl\Ex_stencil_testing.h" />
+    <ClInclude Include="4.advance_lighting\1.ssao.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />

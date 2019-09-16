@@ -31,6 +31,12 @@
     <Filter Include="3.advance_opengl\shaders">
       <UniqueIdentifier>{4bd2c1d1-2c74-4d22-8b0a-6945a8e90e61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="4.advance_lighting">
+      <UniqueIdentifier>{81ba1ad4-9f3d-464b-b1e7-42c54cd1b0a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4.advance_lighting\shaders">
+      <UniqueIdentifier>{beb08891-68ee-4dd0-be41-4dbea63f7e7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ThirdParty\src\glad.c">
@@ -89,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="3.advance_opengl\Ex_stencil_testing.cpp">
       <Filter>3.advance_opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="4.advance_lighting\1.ssao.cpp">
+      <Filter>4.advance_lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +191,24 @@
     <None Include="3.advance_opengl\shaders\ex_stencil_testing_plane.frag">
       <Filter>3.advance_opengl\shaders</Filter>
     </None>
+    <None Include="4.advance_lighting\shaders\1_ssao_geometry.vert">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\1_ssao_geometry.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\1_ssao.vert">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\1_ssao_lighting.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\1_ssao.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\1_ssao_blur.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -225,6 +252,9 @@
     </ClInclude>
     <ClInclude Include="3.advance_opengl\Ex_stencil_testing.h">
       <Filter>3.advance_opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="4.advance_lighting\1.ssao.h">
+      <Filter>4.advance_lighting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
