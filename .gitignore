@@ -7,3 +7,4 @@
 /Obj
 *.user
 /Code/LearnOpenGL/.vs/LearnOpenGL/v15
+/Code/LearnOpenGL/*.vcxproj
