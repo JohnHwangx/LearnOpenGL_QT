@@ -27,6 +27,9 @@ namespace SSAO {
 		static CAMERA::Camera camera;
 
 		void processInput(GLFWwindow* window);
+		void RenderQuad();
+		void RenderCube();
+
 		static void framesize_callback(GLFWwindow* window, int width, int height);
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 		static void cursorpos_callback(GLFWwindow* window, double xpos, double ypos);
