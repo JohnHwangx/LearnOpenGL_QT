@@ -9,18 +9,12 @@ using namespace SSAO;
 bool ssao::firstMouse = true;
 double ssao::lastX;
 double ssao::lastY;
-CAMERA::Camera ssao::camera;
-
-bool keys[1024];
-bool keysPressed[1024];
-
-// Options
-GLuint draw_mode = 1;
+CAMERA::Camera ssao::camera; 
 
 SSAO::ssao::ssao()
 {
 	SCR_WIDTH = 1200;
-	SCR_HEIGHT = 1200;
+	SCR_HEIGHT = 900;
 
 	deltaTiem = 0.0f;
 	lastFrame = 0.0f;
@@ -28,7 +22,7 @@ SSAO::ssao::ssao()
 	firstMouse = true;
 	lastX = SCR_WIDTH / 2.0f;
 	lastY = SCR_HEIGHT / 2.0f;
-	camera = vec3(0.0f, 0.0f, 3.0f);
+	camera = vec3(0.0f, 0.0f, 5.0f);
 }
 
 SSAO::ssao::~ssao()
@@ -81,22 +75,7 @@ void SSAO::ssao::show(std::string& message)
 	Shader shaderSSAOBlur("../OpenGL_src/4.advance_lighting/shaders/1_ssao.vert",
 		"../OpenGL_src/4.advance_lighting/shaders/1_ssao_blur.frag");
 
-	// Set samplers
-	shaderLightingPass.use();
-	shaderLightingPass.setInt("gPositionDepth", 0);
-	shaderLightingPass.setInt("gNormal", 1);
-	shaderLightingPass.setInt("gAlbedo", 2);
-	shaderLightingPass.setInt("ssao", 3);
-	shaderSSAO.use();
-	shaderSSAO.setInt("gPositionDepth", 0);
-	shaderSSAO.setInt("gNormal", 1);
-	shaderSSAO.setInt("texNoise", 2);
-
 	MODEL::Model nanosuit("../../Resource/nanosuit/nanosuit.obj");
-
-	// Lights
-	glm::vec3 lightPos = glm::vec3(2.0, 4.0, -2.0);
-	glm::vec3 lightColor = glm::vec3(0.2, 0.2, 0.7);
 
 	// Set up G-Buffer
 	// 3 textures:
@@ -106,27 +85,27 @@ void SSAO::ssao::show(std::string& message)
 	GLuint gBuffer;
 	glGenFramebuffers(1, &gBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-	GLuint gPositionDepth, gNormal, gAlbedo;
+	GLuint gPosition, gNormal, gAlbedo;
 	// - Position + linear depth color buffer
-	glGenTextures(1, &gPositionDepth);
-	glBindTexture(GL_TEXTURE_2D, gPositionDepth);
+	glGenTextures(1, &gPosition);
+	glBindTexture(GL_TEXTURE_2D, gPosition);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPositionDepth, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPosition, 0);
 	// - Normal color buffer
 	glGenTextures(1, &gNormal);
 	glBindTexture(GL_TEXTURE_2D, gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
 	// - Albedo color buffer
 	glGenTextures(1, &gAlbedo);
 	glBindTexture(GL_TEXTURE_2D, gAlbedo);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedo, 0);
@@ -142,10 +121,12 @@ void SSAO::ssao::show(std::string& message)
 	// - Finally check if framebuffer is complete
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "GBuffer Framebuffer not complete!" << std::endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// Also create framebuffer to hold SSAO processing stage 
 	GLuint ssaoFBO, ssaoBlurFBO;
-	glGenFramebuffers(1, &ssaoFBO);  glGenFramebuffers(1, &ssaoBlurFBO);
+	glGenFramebuffers(1, &ssaoFBO);  
+	glGenFramebuffers(1, &ssaoBlurFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
 	GLuint ssaoColorBuffer, ssaoColorBufferBlur;
 	// - SSAO color buffer
@@ -170,30 +151,40 @@ void SSAO::ssao::show(std::string& message)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// Sample kernel
-	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0); // generates random floats between 0.0 and 1.0
+	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0); // 随机浮点数，范围0.0 - 1.0
 	std::default_random_engine generator;
 	std::vector<glm::vec3> ssaoKernel;
-	for (GLuint i = 0; i < 64; ++i)
+	for (GLuint i = 0; i < 64; ++i)// 64个随机采样点
 	{
-		glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator));
+		glm::vec3 sample(
+			randomFloats(generator) * 2.0 - 1.0, 
+			randomFloats(generator) * 2.0 - 1.0, 
+			randomFloats(generator)
+		);
 		sample = glm::normalize(sample);
 		sample *= randomFloats(generator);
 		GLfloat scale = GLfloat(i) / 64.0;
 
 		// Scale samples s.t. they're more aligned to center of kernel
+		// 用一个加速插值函数实现，将核心样本靠近原点分布
 		scale = lerp(0.1f, 1.0f, scale * scale);
 		sample *= scale;
 		ssaoKernel.push_back(sample);
 	}
 
 	// Noise texture
+	// 创建一个4x4朝向切线空间平面法线的随机旋转向量数组
 	std::vector<glm::vec3> ssaoNoise;
 	for (GLuint i = 0; i < 16; i++)
 	{
-		glm::vec3 noise(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0.0f); // rotate around z-axis (in tangent space)
+		glm::vec3 noise(
+			randomFloats(generator) * 2.0 - 1.0, 
+			randomFloats(generator) * 2.0 - 1.0, 
+			0.0f); // rotate around z-axis (in tangent space)
 		ssaoNoise.push_back(noise);
 	}
-	GLuint noiseTexture; glGenTextures(1, &noiseTexture);
+	GLuint noiseTexture; 
+	glGenTextures(1, &noiseTexture);
 	glBindTexture(GL_TEXTURE_2D, noiseTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, 4, 4, 0, GL_RGB, GL_FLOAT, &ssaoNoise[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -201,9 +192,24 @@ void SSAO::ssao::show(std::string& message)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+	// lighting info
+	// -------------
+	glm::vec3 lightPos = glm::vec3(2.0, 4.0, -2.0);
+	glm::vec3 lightColor = glm::vec3(0.2, 0.2, 0.7);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
+	// shader configuration
+	// --------------------
+	shaderLightingPass.use();
+	shaderLightingPass.setInt("gPosition", 0);
+	shaderLightingPass.setInt("gNormal", 1);
+	shaderLightingPass.setInt("gAlbedo", 2);
+	shaderLightingPass.setInt("ssao", 3);
+	shaderSSAO.use();
+	shaderSSAO.setInt("gPosition", 0);
+	shaderSSAO.setInt("gNormal", 1);
+	shaderSSAO.setInt("texNoise", 2);
+	shaderSSAOBlur.use();
+	shaderSSAOBlur.setInt("ssaoInput", 0);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -211,47 +217,57 @@ void SSAO::ssao::show(std::string& message)
 		deltaTiem = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		// Check and call events
-		glfwPollEvents();
+		// input
+		// -----
 		processInput(window);
 
+		// render
+		// ------
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		// 1. Geometry Pass: render scene's geometry/color data into gbuffer
+		// 几何处理阶段: 渲染到G缓冲中
 		glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glm::mat4 projection = glm::perspective(camera.Zoom, (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 50.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		glm::mat4 model;
+		glm::mat4 model = glm::mat4(1.0f);;
 		shaderGeometryPass.use();
 		shaderGeometryPass.setMat4("projection", projection);
 		shaderGeometryPass.setMat4("view", view);
 		// Floor cube
-		model = glm::translate(model, glm::vec3(0.0, -1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(20.0f, 1.0f, 20.0f));
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0, 7.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.5f, 7.5f, 7.5f));
 		shaderGeometryPass.setMat4("model", model);
+		shaderGeometryPass.setInt("invertedNormals", 1); // invert normals as we're inside the cube
 		RenderCube();
+		shaderGeometryPass.setInt("invertedNormals", 0);
 		// Nanosuit model on the floor
-		model = glm::mat4();
+		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0));
-		model = glm::rotate(model, -90.0f, glm::vec3(1.0, 0.0, 0.0));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
 		model = glm::scale(model, glm::vec3(0.5f));
 		shaderGeometryPass.setMat4("model", model);
 		nanosuit.Draw(shaderGeometryPass);
-
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 		// 2. Create SSAO texture
+		// 使用G缓冲渲染SSAO纹理
 		glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
 		glClear(GL_COLOR_BUFFER_BIT);
 		shaderSSAO.use();
+		// Send kernel + rotation 
+		for (unsigned int i = 0; i < 64; ++i)
+			shaderSSAO.setVec3("samples[" + std::to_string(i) + "]", ssaoKernel[i]);
+		shaderSSAO.setMat4("projection", projection);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, gPositionDepth);
+		glBindTexture(GL_TEXTURE_2D, gPosition);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, gNormal);
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, noiseTexture);
-		// Send kernel + rotation 
-		for (GLuint i = 0; i < 64; ++i)
-			glUniform3fv(glGetUniformLocation(shaderSSAO.ID, ("samples[" + std::to_string(i) + "]").c_str()), 1, &ssaoKernel[i][0]);
-		glUniformMatrix4fv(glGetUniformLocation(shaderSSAO.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		RenderQuad();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -266,31 +282,32 @@ void SSAO::ssao::show(std::string& message)
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// 4. Lighting Pass: traditional deferred Blinn-Phong lighting now with added screen-space ambient occlusion
+		// 光照处理阶段: 渲染场景光照
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderLightingPass.use();
+		// send light relevant uniforms
+		glm::vec3 lightPosView = glm::vec3(camera.GetViewMatrix() * glm::vec4(lightPos, 1.0));
+		shaderLightingPass.setVec3("light.Position", lightPosView);
+		shaderLightingPass.setVec3("light.Color", lightColor);
+		// Update attenuation parameters
+		const float constant = 1.0; // note that we don't send this to the shader, we assume it is always 1.0 (in our case)
+		const float linear = 0.09;
+		const float quadratic = 0.032;
+		shaderLightingPass.setFloat("light.Linear", linear);
+		shaderLightingPass.setFloat("light.Quadratic", quadratic);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, gPositionDepth);
+		glBindTexture(GL_TEXTURE_2D, gPosition);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, gNormal);
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, gAlbedo);
-		glActiveTexture(GL_TEXTURE3); // Add extra SSAO texture to lighting pass
+		glActiveTexture(GL_TEXTURE3); // add extra SSAO texture to lighting pass
 		glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
-		// Also send light relevant uniforms
-		glm::vec3 lightPosView = glm::vec3(camera.GetViewMatrix() * glm::vec4(lightPos, 1.0));
-		glUniform3fv(glGetUniformLocation(shaderLightingPass.ID, "light.Position"), 1, &lightPosView[0]);
-		glUniform3fv(glGetUniformLocation(shaderLightingPass.ID, "light.Color"), 1, &lightColor[0]);
-		// Update attenuation parameters
-		const GLfloat constant = 1.0; // Note that we don't send this to the shader, we assume it is always 1.0 (in our case)
-		const GLfloat linear = 0.09;
-		const GLfloat quadratic = 0.032;
-		glUniform1f(glGetUniformLocation(shaderLightingPass.ID, "light.Linear"), linear);
-		glUniform1f(glGetUniformLocation(shaderLightingPass.ID, "light.Quadratic"), quadratic);
-		glUniform1i(glGetUniformLocation(shaderLightingPass.ID, "draw_mode"), draw_mode);
 		RenderQuad();
 
 		// Swap the buffers
 		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 
 	glfwTerminate();
@@ -336,48 +353,48 @@ void SSAO::ssao::RenderCube()
 	if (cubeVAO == 0)
 	{
 		GLfloat vertices[] = {
-			// Back face
-			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // Bottom-left
-			0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f, // top-right
-			0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, // bottom-right         
-			0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,  // top-right
-			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,  // bottom-left
-			-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,// top-left
-			// Front face
-			-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom-left
-			0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,  // bottom-right
-			0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,  // top-right
-			0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // top-right
-			-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,  // top-left
-			-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // bottom-left
-			// Left face
-			-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // top-right
-			-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top-left
-			-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,  // bottom-left
-			-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-left
-			-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,  // bottom-right
-			-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // top-right
-			// Right face
-			0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // top-left
-			0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-right
-			0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top-right         
-			0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,  // bottom-right
-			0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,  // top-left
-			0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // bottom-left     
-			// Bottom face
-			-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, // top-right
-			0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f, // top-left
-			0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,// bottom-left
-			0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, // bottom-left
-			-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, // bottom-right
-			-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, // top-right
-			// Top face
-			-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,// top-left
-			0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom-right
-			0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, // top-right     
-			0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom-right
-			-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,// top-left
-			-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f // bottom-left        
+			// back face
+			-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
+			1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
+			1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // bottom-right         
+			1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
+			-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
+			-1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // top-left
+			// front face
+			-1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
+			1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // bottom-right
+			1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
+			1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
+			-1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f, // top-left
+			-1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
+			// left face
+			-1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
+			-1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-left
+			-1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
+			-1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
+			-1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-right
+			-1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
+			// right face
+			1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
+			1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
+			1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-right         
+			1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
+			1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
+			1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left     
+			// bottom face
+			-1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
+			1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // top-left
+			1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
+			1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
+			-1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // bottom-right
+			-1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
+			// top face
+			-1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
+			1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
+			1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // top-right     
+			1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
+			-1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
+			-1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left
 		};
 		glGenVertexArrays(1, &cubeVAO);
 		glGenBuffers(1, &cubeVBO);
@@ -404,49 +421,21 @@ void SSAO::ssao::RenderCube()
 void SSAO::ssao::processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
+		glfwSetWindowShouldClose(window, true);
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera.ProcessKeyboard(CAMERA::FORWARD, deltaTiem);
-	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		camera.ProcessKeyboard(CAMERA::BACKWARD, deltaTiem);
-	else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		camera.ProcessKeyboard(CAMERA::LEFT, deltaTiem);
-	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(CAMERA::RIGHT, deltaTiem);
-
-	if (keys[GLFW_KEY_1])
-		draw_mode = 1;
-	if (keys[GLFW_KEY_2])
-		draw_mode = 2;
-	if (keys[GLFW_KEY_3])
-		draw_mode = 3;
-	if (keys[GLFW_KEY_4])
-		draw_mode = 4;
-	if (keys[GLFW_KEY_5])
-		draw_mode = 5;
 }
 
 void SSAO::ssao::framesize_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-}
-
-void SSAO::ssao::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-
-	if (key >= 0 && key <= 1024)
-	{
-		if (action == GLFW_PRESS)
-			keys[key] = true;
-		else if (action == GLFW_RELEASE)
-		{
-			keys[key] = false;
-			keysPressed[key] = false;
-		}
-	}
 }
 
 void SSAO::ssao::cursorpos_callback(GLFWwindow* window, double xpos, double ypos)

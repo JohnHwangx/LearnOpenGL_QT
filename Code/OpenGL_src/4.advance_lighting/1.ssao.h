@@ -31,7 +31,6 @@ namespace SSAO {
 		void RenderCube();
 
 		static void framesize_callback(GLFWwindow* window, int width, int height);
-		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 		static void cursorpos_callback(GLFWwindow* window, double xpos, double ypos);
 		static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	};
