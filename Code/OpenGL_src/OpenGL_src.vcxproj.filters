@@ -108,6 +108,9 @@
     <ClCompile Include="4.advance_lighting\1.ssao.cpp">
       <Filter>4.advance_lighting</Filter>
     </ClCompile>
+    <ClCompile Include="4.advance_lighting\2.deferred_shading.cpp">
+      <Filter>4.advance_lighting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h">
@@ -233,6 +236,30 @@
     <None Include="4.advance_lighting\shaders\1_ssao_blur.frag">
       <Filter>4.advance_lighting\shaders</Filter>
     </None>
+    <None Include="4.advance_lighting\shaders\2_deferred_light_box.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\2_deferred_light_box.vert">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\2_deferred_shading.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\2_deferred_shading.vert">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\2_fbo_debug.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\2_fbo_debug.vert">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\2_g_buffer.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\2_g_buffer.vert">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -287,6 +314,9 @@
       <Filter>3.advance_opengl</Filter>
     </ClInclude>
     <ClInclude Include="4.advance_lighting\1.ssao.h">
+      <Filter>4.advance_lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="4.advance_lighting\2.deferred_shading.h">
       <Filter>4.advance_lighting</Filter>
     </ClInclude>
   </ItemGroup>
