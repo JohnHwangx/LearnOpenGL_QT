@@ -173,7 +173,8 @@
     <ClCompile Include="3.advance_opengl\5_framebuffers.cpp" />
     <ClCompile Include="3.advance_opengl\Ex_stencil_testing.cpp" />
     <ClCompile Include="4.advance_lighting\1.ssao.cpp" />
-    <ClCompile Include="4.advance_lighting\2.deferred_shading.cpp" />
+    <ClCompile Include="4.advance_lighting\2.1.deferred_shading.cpp" />
+    <ClCompile Include="4.advance_lighting\2.2.deferred_shading_volumes.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -245,13 +246,17 @@
     <ClInclude Include="3.advance_opengl\5_framebuffers.h" />
     <ClInclude Include="3.advance_opengl\Ex_stencil_testing.h" />
     <ClInclude Include="4.advance_lighting\1.ssao.h" />
-    <ClInclude Include="4.advance_lighting\2.deferred_shading.h" />
+    <ClInclude Include="4.advance_lighting\2.1.deferred_shading.h" />
+    <ClInclude Include="4.advance_lighting\2.2.deferred_shading_volumes.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Trackball.h" />
     <ClInclude Include="Vertices.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="4.advance_lighting\shaders\2.2_deferred_shading.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

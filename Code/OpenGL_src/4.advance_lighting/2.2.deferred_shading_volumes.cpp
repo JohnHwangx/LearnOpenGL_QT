@@ -1,17 +1,17 @@
-#include "2.1.deferred_shading.h"
+#include "2.2.deferred_shading_volumes.h"
 
 using namespace std;
 using namespace glm;
 using namespace MODEL;
 using namespace CAMERA;
-using namespace DEFERRED_SHADING;
+using namespace DEFERRED_SHADING_VOLUMES;
 
-bool deferrd_shading::firstMouse = true;
-double deferrd_shading::lastX;
-double deferrd_shading::lastY;
-CAMERA::Camera deferrd_shading::camera;
+bool deferred_shading_volumes::firstMouse = true;
+double deferred_shading_volumes::lastX;
+double deferred_shading_volumes::lastY;
+CAMERA::Camera deferred_shading_volumes::camera;
 
-DEFERRED_SHADING::deferrd_shading::deferrd_shading()
+DEFERRED_SHADING_VOLUMES::deferred_shading_volumes::deferred_shading_volumes()
 {
 	SCR_WIDTH = 1200;
 	SCR_HEIGHT = 900;
@@ -25,14 +25,14 @@ DEFERRED_SHADING::deferrd_shading::deferrd_shading()
 	camera = vec3(0.0f, 0.0f, 5.0f);
 }
 
-DEFERRED_SHADING::deferrd_shading::~deferrd_shading()
+DEFERRED_SHADING_VOLUMES::deferred_shading_volumes::~deferred_shading_volumes()
 {
 }
 
-void DEFERRED_SHADING::deferrd_shading::show(std::string & message)
+void DEFERRED_SHADING_VOLUMES::deferred_shading_volumes::show(std::string& message)
 {
 	// glfw: initialize and configure
-	// ------------------------------
+    // ------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -42,8 +42,8 @@ void DEFERRED_SHADING::deferrd_shading::show(std::string & message)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-														 // glfw window creation
-														 // --------------------
+	// glfw window creation
+	// --------------------
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
@@ -73,11 +73,11 @@ void DEFERRED_SHADING::deferrd_shading::show(std::string & message)
 
 	// build and compile shaders
 	// -------------------------
-	Shader shaderGeometryPass("../OpenGL_src/4.advance_lighting/shaders/2_g_buffer.vert", 
+	Shader shaderGeometryPass("../OpenGL_src/4.advance_lighting/shaders/2_g_buffer.vert",
 		"../OpenGL_src/4.advance_lighting/shaders/2_g_buffer.frag");
-	Shader shaderLightingPass("../OpenGL_src/4.advance_lighting/shaders/2_deferred_shading.vert", 
-		"../OpenGL_src/4.advance_lighting/shaders/2_deferred_shading.frag");
-	Shader shaderLightBox("../OpenGL_src/4.advance_lighting/shaders/2_deferred_light_box.vert", 
+	Shader shaderLightingPass("../OpenGL_src/4.advance_lighting/shaders/2_deferred_shading.vert",
+		"../OpenGL_src/4.advance_lighting/shaders/2.2_deferred_shading.frag");
+	Shader shaderLightBox("../OpenGL_src/4.advance_lighting/shaders/2_deferred_light_box.vert",
 		"../OpenGL_src/4.advance_lighting/shaders/2_deferred_light_box.frag");
 
 	// load models
@@ -223,6 +223,10 @@ void DEFERRED_SHADING::deferrd_shading::show(std::string & message)
 			const float quadratic = 1.8;
 			shaderLightingPass.setFloat("lights[" + std::to_string(i) + "].Linear", linear);
 			shaderLightingPass.setFloat("lights[" + std::to_string(i) + "].Quadratic", quadratic);
+			// then calculate radius of light volume/sphere
+			const float maxBrightness = std::fmaxf(std::fmaxf(lightColors[i].r, lightColors[i].g), lightColors[i].b);
+			float radius = (-linear + std::sqrt(linear * linear - 4 * quadratic * (constant - (256.0f / 5.0f) * maxBrightness))) / (2.0f * quadratic);
+			shaderLightingPass.setFloat("lights[" + std::to_string(i) + "].Radius", radius);
 		}
 		shaderLightingPass.setVec3("viewPos", camera.Position);
 		// finally render quad
@@ -232,9 +236,9 @@ void DEFERRED_SHADING::deferrd_shading::show(std::string & message)
 		// ----------------------------------------------------------------------------------
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
-												   // blit to default framebuffer. Note that this may or may not work as the internal formats of both the FBO and default framebuffer have to match.
-												   // the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the 		
-												   // depth buffer in another shader stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
+		// blit to default framebuffer. Note that this may or may not work as the internal formats of both the FBO and default framebuffer have to match.
+		// the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the 		
+		// depth buffer in another shader stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
 		glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -263,7 +267,7 @@ void DEFERRED_SHADING::deferrd_shading::show(std::string & message)
 	glfwTerminate();
 }
 
-void DEFERRED_SHADING::deferrd_shading::processInput(GLFWwindow * window)
+void DEFERRED_SHADING_VOLUMES::deferred_shading_volumes::processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
@@ -282,7 +286,7 @@ void DEFERRED_SHADING::deferrd_shading::processInput(GLFWwindow * window)
 // -----------------------------------------
 unsigned int quadVAO = 0;
 unsigned int quadVBO;
-void DEFERRED_SHADING::deferrd_shading::renderQuad()
+void DEFERRED_SHADING_VOLUMES::deferred_shading_volumes::renderQuad()
 {
 	if (quadVAO == 0)
 	{
@@ -290,8 +294,8 @@ void DEFERRED_SHADING::deferrd_shading::renderQuad()
 			// positions        // texture Coords
 			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
 			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-			1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
-			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
 		};
 		// setup plane VAO
 		glGenVertexArrays(1, &quadVAO);
@@ -313,7 +317,7 @@ void DEFERRED_SHADING::deferrd_shading::renderQuad()
 // -------------------------------------------------
 unsigned int cubeVAO = 0;
 unsigned int cubeVBO = 0;
-void DEFERRED_SHADING::deferrd_shading::renderCube()
+void DEFERRED_SHADING_VOLUMES::deferred_shading_volumes::renderCube()
 {
 	// initialize (if necessary)
 	if (cubeVAO == 0)
@@ -321,16 +325,16 @@ void DEFERRED_SHADING::deferrd_shading::renderCube()
 		float vertices[] = {
 			// back face
 			-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
-			1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
-			1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // bottom-right         
-			1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
+			 1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
+			 1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // bottom-right         
+			 1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
 			-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
 			-1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // top-left
 			// front face
 			-1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
-			1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // bottom-right
-			1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
-			1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
+			 1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // bottom-right
+			 1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
+			 1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
 			-1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f, // top-left
 			-1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
 			// left face
@@ -341,24 +345,24 @@ void DEFERRED_SHADING::deferrd_shading::renderCube()
 			-1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-right
 			-1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
 			// right face
-			1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
-			1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
-			1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-right         
-			1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
-			1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
-			1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left     
+			 1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
+			 1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
+			 1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-right         
+			 1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
+			 1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
+			 1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left     
 			// bottom face
 			-1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
-			1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // top-left
-			1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
-			1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
+			 1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // top-left
+			 1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
+			 1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
 			-1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // bottom-right
 			-1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
 			// top face
 			-1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
-			1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
-			1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // top-right     
-			1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
+			 1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
+			 1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // top-right     
+			 1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
 			-1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
 			-1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left        
 		};
@@ -384,14 +388,14 @@ void DEFERRED_SHADING::deferrd_shading::renderCube()
 	glBindVertexArray(0);
 }
 
-void DEFERRED_SHADING::deferrd_shading::framebuffer_size_callback(GLFWwindow * window, int width, int height)
+void DEFERRED_SHADING_VOLUMES::deferred_shading_volumes::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 }
 
-void DEFERRED_SHADING::deferrd_shading::mouse_callback(GLFWwindow * window, double xpos, double ypos)
+void DEFERRED_SHADING_VOLUMES::deferred_shading_volumes::mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (firstMouse)
 	{
@@ -409,7 +413,7 @@ void DEFERRED_SHADING::deferrd_shading::mouse_callback(GLFWwindow * window, doub
 	camera.ProcessMouseMove(xoffset, yoffset);
 }
 
-void DEFERRED_SHADING::deferrd_shading::scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
+void DEFERRED_SHADING_VOLUMES::deferred_shading_volumes::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	camera.ProcessMouseScroll(yoffset);
 }
