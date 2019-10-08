@@ -114,6 +114,9 @@
     <ClCompile Include="4.advance_lighting\2.2.deferred_shading_volumes.cpp">
       <Filter>4.advance_lighting</Filter>
     </ClCompile>
+    <ClCompile Include="4.advance_lighting\6.hdr.cpp">
+      <Filter>4.advance_lighting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="1.getting_start\3.1.shaders_uniform.h">
@@ -263,6 +266,18 @@
     <None Include="4.advance_lighting\shaders\2_g_buffer.vert">
       <Filter>4.advance_lighting\shaders</Filter>
     </None>
+    <None Include="4.advance_lighting\shaders\6_hdr.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\6_hdr.vert">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\6_lighting.frag">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
+    <None Include="4.advance_lighting\shaders\6_lighting.vert">
+      <Filter>4.advance_lighting\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -323,6 +338,9 @@
       <Filter>4.advance_lighting</Filter>
     </ClInclude>
     <ClInclude Include="4.advance_lighting\2.2.deferred_shading_volumes.h">
+      <Filter>4.advance_lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="4.advance_lighting\6.hdr.h">
       <Filter>4.advance_lighting</Filter>
     </ClInclude>
   </ItemGroup>

@@ -23,32 +23,32 @@
     <ProjectGuid>{D0B4C208-9FDF-4B4A-A967-4BBC72986DC3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>OpenGLsrc</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -175,6 +175,7 @@
     <ClCompile Include="4.advance_lighting\1.ssao.cpp" />
     <ClCompile Include="4.advance_lighting\2.1.deferred_shading.cpp" />
     <ClCompile Include="4.advance_lighting\2.2.deferred_shading_volumes.cpp" />
+    <ClCompile Include="4.advance_lighting\6.hdr.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -232,6 +233,10 @@
     <None Include="4.advance_lighting\shaders\2_fbo_debug.vert" />
     <None Include="4.advance_lighting\shaders\2_g_buffer.frag" />
     <None Include="4.advance_lighting\shaders\2_g_buffer.vert" />
+    <None Include="4.advance_lighting\shaders\6_hdr.frag" />
+    <None Include="4.advance_lighting\shaders\6_hdr.vert" />
+    <None Include="4.advance_lighting\shaders\6_lighting.frag" />
+    <None Include="4.advance_lighting\shaders\6_lighting.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="1.getting_start\7.3.camera.h" />
@@ -248,6 +253,7 @@
     <ClInclude Include="4.advance_lighting\1.ssao.h" />
     <ClInclude Include="4.advance_lighting\2.1.deferred_shading.h" />
     <ClInclude Include="4.advance_lighting\2.2.deferred_shading_volumes.h" />
+    <ClInclude Include="4.advance_lighting\6.hdr.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
